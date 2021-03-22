@@ -114,14 +114,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
+# https://qiita.com/shonansurvivors/items/ff2dc23ed0962c2a6f12
+# ここの方法→adminページのcss表示OK
 # STATIC_URL = '/static/'
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 # STATIC_ROOT = 'staticfiles'
 
+# akiyokoさんの方法→adminページのcss表示OK
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+# PROJECT_NAME = os.path.basename(BASE_DIR)
+# STATIC_ROOT = 'var/www/{}/static'.format(PROJECT_NAME)
+
+# https://devcenter.heroku.com/ja/articles/django-assets
+# Herokuの方法
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-PROJECT_NAME = os.path.basename(BASE_DIR)
-STATIC_ROOT = 'var/www/{}/static'.format(PROJECT_NAME)
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 try:
     from .local_settings import *
