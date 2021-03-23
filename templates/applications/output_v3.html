@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<title>ヤフオク検索ツール 検索結果</title>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+	</head>
+	<body>
+	<div style="padding-left:5px;margin-left:5px;padding-right:5px;margin-right:5px;">
+		<!--
+		-->
+			<p>
+				<a href="{{ sub_data.検索URL }}" target = "_blank">条件を付加したURL</a>
+			</p>
+			<p>
+				条件にマッチした件数：{{ auc_data|length }} 件<br><br>
+			<p>
+				{% for fo_auc_data in auc_data %}
+					<a href="{{ fo_auc_data.オクURL }}" target="_blank">
+						<img alt="{{ fo_auc_data.オク名 }}" src="{{ fo_auc_data.画像URL }}" loading="lazy" height="150"/><br>
+					</a>
+					<a href="{{ fo_auc_data.オクURL }}" target = "_blank">{{ fo_auc_data.オク名 }}</a><br>
+					{% if fo_auc_data.出品者ID != None %}
+						出品者ID：{{ fo_auc_data.出品者ID }}<br>
+					{% endif %}
+					{% if fo_auc_data.評価レート != None %}
+						出品者の評価：{{ fo_auc_data.評価レート }}<br>
+					{% endif %}
+					現在価格：{{ fo_auc_data.現在価格 }}円<br>
+					即決価格：{{ fo_auc_data.即決価格 }}円<br>
+					入札数：{{ fo_auc_data.入札数 }}<br>
+					残り時間：{{ fo_auc_data.残り時間 }}<br>
+					{% if fo_auc_data.自動延長 == "なし" %}
+						自動延長：<span style="font-weight:bold; color:red;">{{ fo_auc_data.自動延長 }}</span><br><br>
+					{% else %}
+						自動延長：{{ fo_auc_data.自動延長 }}<br><br>
+					{% endif %}
+					<!-- アコーディオン
+					商品説明<br>{{ fo_auc_data.商品説明|safe }}<br>
+					<div class="accordion" id="accordion-id-{{ forloop.counter }}">
+						<div class="card">
+							<div class="card-header" id="header-id-{{ forloop.counter }}">
+								<button class="btn btn-link" type="button"
+										data-toggle="collapse" data-target="#card-id-{{ forloop.counter }}"
+										aria-expanded="true" aria-controls="card-id-{{ forloop.counter }}">
+									商品説明
+								</button>
+							</div>
+							<div class="collapse" id="card-id-{{ forloop.counter }}"
+									aria-labelledby="header-id-{{ forloop.counter }}" data-parent="#accordion-id-{{ forloop.counter }}">
+								<div class="card-body">
+									{{ fo_auc_data.商品説明 }}
+								</div>
+							</div>
+						</div>
+					</div><br>-->
+				{% endfor %}
+			</p>
+		</div>
+		<!-- jQuery、Popper.js、Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	</body>
+</html>
