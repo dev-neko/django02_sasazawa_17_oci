@@ -108,3 +108,10 @@ except ImportError:
 
 if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
+
+##################
+# Authentication #
+##################
+LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/work_apps/ya_src_tool/v3/'
+LOGOUT_REDIRECT_URL = '/work_apps/accounts/login/'
