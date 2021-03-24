@@ -1,9 +1,3 @@
-"""
-python manage.py makemigrations
-python manage.py migrate
-"""
-
-
 from django.db import models
 
 class SearchQueryModel(models.Model):
