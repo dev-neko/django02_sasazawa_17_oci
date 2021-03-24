@@ -2,7 +2,7 @@ from django.db import models
 
 class SearchQueryModel(models.Model):
 	# これを明示しないと参照エラーが発生する
-	# objects=models.Manager()
+	objects=models.Manager()
 	md_query_name=models.CharField(max_length=50,null=True)
 	md_radio_url=models.CharField(max_length=50,null=True)
 	md_src_url=models.TextField(null=True)
