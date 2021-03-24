@@ -258,17 +258,6 @@
 					<button type="submit" name="db_action_btn" value='save' onclick="sametab('')">保存</button>
 				</p>
 				<!-- 読み込み 削除 すべて削除 -->
-				<!--
-				<p>
-					<select name="select_db_data">
-						{% for item in dt_exists_db_data.exists_db_data %}
-							<option value={{ item.id }}>{{ item.md_query_name }}</option>
-						{% endfor %}
-					</select>
-					<button type="submit" name="db_action_btn" value='read' onclick="sametab('')">読込</button>
-					<button type="submit" name="db_action_btn" value='delete' onclick="return sametab_conf('')">削除</button>
-				</p>
-				-->
 			</form>
 			<p>
 				<button onclick="location.href='{% url 'logout' %}'">ログアウト</button>
