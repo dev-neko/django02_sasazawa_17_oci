@@ -4,3 +4,7 @@ config/generate_secretkey_setting.py
 
 最低限必要なパッケージを一括でインストールする
 pip install -r requirements.txt
+
+.gitignore に
+local_settings.py
+を追加する
