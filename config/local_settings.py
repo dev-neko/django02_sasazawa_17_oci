@@ -10,4 +10,4 @@ DATABASES={
 }
 
 DEBUG=True
-SECRET_KEY='generate_secretkey_setting.pyで生成する'
+SECRET_KEY='0c2mr9p-mjjf7490d7i!2i!)*th*ii)dd4efvijnrx1f8xwdc*'
