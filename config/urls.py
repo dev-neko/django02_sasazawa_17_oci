@@ -3,6 +3,6 @@ from django.contrib import admin
 
 urlpatterns = [
 	path('admin/', admin.site.urls),
-	path('work_apps/',include('applications.urls')),
-	path('work_apps/accounts/',include('django.contrib.auth.urls')),
+	path('',include('applications.urls')),
+	path('accounts/',include('django.contrib.auth.urls')),
 ]

@@ -112,6 +112,6 @@ if not DEBUG:
 ##################
 # Authentication #
 ##################
-LOGIN_URL = '/login'
-LOGIN_REDIRECT_URL = '/work_apps/ya_src_tool/v3/'
-LOGOUT_REDIRECT_URL = '/work_apps/accounts/login/'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/v4/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'
