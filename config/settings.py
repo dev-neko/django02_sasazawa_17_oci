@@ -7,8 +7,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 
-DEBUG = True
-SECRET_KEY = 'hao@_p9(=+6x#z)(8%6q2c!ew0xm2h4@o-7o)m@4_5zscrl$j#'
+# 本番環境でエラーを確認する時は一時的にこれをsettings.pyに記載する
+DEBUG=True
+SECRET_KEY = 'gsxu+6hk_nkq0%4=*m9cr_$j@-abd-%lprb0ycqi78f#!gvpe3'
 
 INSTALLED_APPS = [
     'django.contrib.admin',
