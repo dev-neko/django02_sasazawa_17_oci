@@ -7,10 +7,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEBUG = False
 ALLOWED_HOSTS = ['*']
 
-# 本番環境でエラーを確認する時は一時的にこれをsettings.pyに記載する
-DEBUG=True
-SECRET_KEY = 'gsxu+6hk_nkq0%4=*m9cr_$j@-abd-%lprb0ycqi78f#!gvpe3'
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
