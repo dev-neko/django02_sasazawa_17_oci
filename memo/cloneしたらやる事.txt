@@ -1,0 +1,6 @@
+clone した後に1回だけ
+config/generate_secretkey_setting.py
+を実行して SECRET_KEY の生成を行い local_settings.py に記載して、Herokuの環境変数にも設定する
+
+最低限必要なパッケージを一括でインストールする
+pip install -r requirements.txt

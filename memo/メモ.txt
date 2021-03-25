@@ -1,0 +1,23 @@
+# DEBUGは切り替えなくても実行可能
+python manage.py runserver
+
+# migrations ファイルは Heroku では作成できないのでローカルで作成して一緒にpushする
+# push した後に models.py の内容を適用させるために Heroku の Run console でも migrate する
+python manage.py makemigrations
+python manage.py migrate
+
+# DB で1度実行すればデータは消えないので再度実行する必要は無い
+# su だけは Heroku の Run console から作成する必要がある
+python manage.py createsuperuser
+
+# パッケージに変更があればその都度実行してファイルを更新する
+pip freeze > requirements.txt
+
+# 本番環境でエラーを確認する時は一時的にこれを settings.py に記載する
+DEBUG = True
+SECRET_KEY = ''
+
+# Heroku の設定はここを参考にする
+https://qiita.com/shonansurvivors/items/ff2dc23ed0962c2a6f12#13-heroku%E3%81%AE%E8%A8%AD%E5%AE%9A
+
+Heroku は捨てメアドだと拒否される
