@@ -10,6 +10,8 @@ python manage.py migrate
 # su だけは Heroku の Run console から作成する必要がある
 python manage.py createsuperuser
 
+
+
 # パッケージに変更があればその都度実行してファイルを更新する
 pip freeze > requirements.txt
 
