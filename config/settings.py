@@ -113,10 +113,10 @@ except ImportError:
 if not DEBUG:
     SECRET_KEY=os.environ['SECRET_KEY']
     # Celery設定 サーバ用
-    # CELERY_BROKER_URL=os.environ.get("REDIS_URL")
-    # CELERY_RESULT_BACKEND=os.environ.get("REDIS_URL")
-    CELERY_BROKER_URL=os.environ['REDIS_URL']
-    CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
+    CELERY_BROKER_URL=os.environ.get("REDIS_URL")
+    CELERY_RESULT_BACKEND=os.environ.get("REDIS_URL")
+    # CELERY_BROKER_URL=os.environ['REDIS_URL']
+    # CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
 
 ##################
 # Authentication #

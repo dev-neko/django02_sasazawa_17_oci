@@ -15,6 +15,7 @@ Django==3.1.7
 django-celery-results==2.0.1
 django-heroku==0.3.1
 django-redis==4.12.1
+django-redis-cache==3.0.0
 dnspython==1.16.0
 eventlet==0.30.2
 greenlet==1.0.0
