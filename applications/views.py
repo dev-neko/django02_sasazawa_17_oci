@@ -267,9 +267,9 @@ def tame01_output(request):
 		y=int(request.POST["input_b"])
 		task_id=add.delay(x,y)
 		result=list(TaskResult.objects.all().values_list("result",flat=True))
-		if len(result)==0:
-			result[0]=0
-		django_template_data={'result':result[0]}
+		# if len(result)==0:
+		# 	result[0]=0
+		django_template_data={'result':result}
 		return render(request,'applications/tame01_output.html',django_template_data)
 
 
