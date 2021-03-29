@@ -112,7 +112,7 @@ except ImportError:
     pass
 
 if not DEBUG:
-    SECRET_KEY = os.environ['SECRET_KEY']
+    SECRET_KEY=os.environ['SECRET_KEY']
     CELERY_BROKER_URL=os.environ['REDIS_URL']
 
 ##################
