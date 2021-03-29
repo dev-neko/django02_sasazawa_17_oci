@@ -3,7 +3,7 @@ from celery import shared_task
 import time
 
 @shared_task
-def add(x, y):
+def add(x,y):
 	print("処理中")
 	z = x + y
 	time.sleep(10)

@@ -22,10 +22,12 @@ INSTALLED_APPS = [
 ]
 
 # Celery設定 サーバ用
-# CELERY_BROKER_URL=os.environ.get("REDIS_URL")
+CELERY_BROKER_URL=os.environ.get("REDIS_URL")
 # CELERY_RESULT_BACKEND=os.environ.get("REDIS_URL")
-CELERY_BROKER_URL=os.environ['REDIS_URL']
-CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
+CELERY_RESULT_BACKEND = "django-db"
+# これは開発環境だと local_settings あってもエラーになる
+# CELERY_BROKER_URL=os.environ['REDIS_URL']
+# CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
