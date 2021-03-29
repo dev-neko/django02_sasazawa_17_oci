@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Title</title>
+</head>
+<body>
+	<p>値を入力</p>
+	<form method="post" action="tame01_output/" target="_blank">
+		{% csrf_token %}
+		<input type="text" name="input_a" value="2">
+		<span>+</span>
+		<input type="text" name="input_b" value="3">
+		<input type="submit" name="add_button" value="計算">
+	</form>
+</body>
+</html>

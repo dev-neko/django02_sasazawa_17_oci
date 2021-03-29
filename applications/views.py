@@ -6,6 +6,9 @@ from django.shortcuts import render
 from .models import SearchQueryModel
 import sys
 
+from django_celery_results.models import TaskResult
+from config.tasks import add
+
 
 
 def ya_src_tool_v4(request):
@@ -66,6 +69,7 @@ def ya_src_tool_v4(request):
 		return HttpResponseRedirect('/accounts/login/')
 
 def output_v4(request):
+	print(request)
 	# テンプレへ渡す辞書
 	auc_data_dict=[]
 	src_url_list=[]
@@ -253,6 +257,22 @@ def output_v4(request):
 												}
 	# print(django_template_data)
 	return render(request, 'applications/output_v4.html', django_template_data)
+
+def tame01_input(request):
+	return render(request,'applications/tame01_input.html')
+
+def tame01_output(request):
+	if 'add_button' in request.POST:
+		x=int(request.POST['input_a'])
+		y=int(request.POST["input_b"])
+		task_id=add.delay(x,y)
+		result=list(TaskResult.objects.all().values_list("result",flat=True))
+		if len(result)==0:
+			result[0]=0
+		django_template_data={'result':result[0]}
+		return render(request,'applications/tame01_output.html',django_template_data)
+
+
 
 
 

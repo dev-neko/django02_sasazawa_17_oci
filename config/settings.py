@@ -15,7 +15,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'applications.apps.ApplicationsConfig',
+    'django_celery_results',
 ]
+
+# Celery設定
+CELERY_BROKER_URL=os.environ.get('REDIS_URL','redis://localhost:6379/1')
+CELERY_RESULT_BACKEND="django-db"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,6 +113,7 @@ except ImportError:
 
 if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
+    CELERY_BROKER_URL=os.environ['REDIS_URL']
 
 ##################
 # Authentication #
