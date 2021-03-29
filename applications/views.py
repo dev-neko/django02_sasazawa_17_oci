@@ -268,6 +268,7 @@ def tame01_output(request):
 		y=int(request.POST["input_b"])
 		task_id=add.delay(x,y)
 		result=AsyncResult(task_id)
+		# result=add(x,y)
 		# result=list(TaskResult.objects.all().values_list("result",flat=True))
 		# if len(result)==0:
 		# 	result[0]=0
