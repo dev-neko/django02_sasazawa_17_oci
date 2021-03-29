@@ -21,10 +21,6 @@ INSTALLED_APPS = [
     'django_celery_results',
 ]
 
-# Celery設定 サーバ用
-CELERY_BROKER_URL = os.environ.get("REDIS_URL")
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_URL")
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -116,6 +112,11 @@ except ImportError:
 
 if not DEBUG:
     SECRET_KEY=os.environ['SECRET_KEY']
+    # Celery設定 サーバ用
+    # CELERY_BROKER_URL=os.environ.get("REDIS_URL")
+    # CELERY_RESULT_BACKEND=os.environ.get("REDIS_URL")
+    CELERY_BROKER_URL=os.environ['REDIS_URL']
+    CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
 
 ##################
 # Authentication #
