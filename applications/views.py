@@ -8,6 +8,7 @@ import sys
 
 from django_celery_results.models import TaskResult
 from config.tasks import add
+from celery.result import AsyncResult
 
 
 
@@ -266,7 +267,8 @@ def tame01_output(request):
 		x=int(request.POST['input_a'])
 		y=int(request.POST["input_b"])
 		task_id=add.delay(x,y)
-		result=list(TaskResult.objects.all().values_list("result",flat=True))
+		result=AsyncResult(task_id)
+		# result=list(TaskResult.objects.all().values_list("result",flat=True))
 		# if len(result)==0:
 		# 	result[0]=0
 		django_template_data={'result':result}
