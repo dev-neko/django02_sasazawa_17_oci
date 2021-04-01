@@ -5,18 +5,16 @@
 	<body onLoad="JavaScript:send_submit();">
 		<!--
 		-->
-		<div style="padding-left:5px;margin-left:5px;padding-right:5px;margin-right:5px;">
-			<form id="celery_task_form" method="post" action="">
-				{% csrf_token %}
-				<p>このページはデータを解析している間は5秒ごとに自動で更新され、データの解析が終了すると解析結果が表示されます。</p>
-				<!--
-				<p>タスクID：{{ celery_task }}</p>
-				<p>タスクstate：{{ celery_task.state }}</p>
-				<p>タスクready：{{ celery_task.ready }}</p>
-				-->
-				<input type="hidden" name="input_celery_task" value="{{ celery_task }}">
-			</form>
-		</div>>
+		<form id="celery_task_form" method="post" action="">
+			{% csrf_token %}
+			<p>このページはデータを解析している間は5秒ごとに自動で更新され、データの解析が終了すると解析結果が表示されます。</p>
+			<!--
+			<p>タスクID：{{ celery_task }}</p>
+			<p>タスクstate：{{ celery_task.state }}</p>
+			<p>タスクready：{{ celery_task.ready }}</p>
+			-->
+			<input type="hidden" name="input_celery_task" value="{{ celery_task }}">
+		</form>
 	</body>
 	<script type="text/javascript">
 		 function send_submit() {
