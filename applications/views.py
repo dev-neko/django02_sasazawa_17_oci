@@ -84,7 +84,7 @@ def input_v4(request):
 		return HttpResponseRedirect('/accounts/login/')
 
 def output_v4(request):
-	print(request.POST)
+	# print(request.POST)
 	if "srch_submit_btn" in request.POST:
 		# 何曜日の何時までに終了か取得
 		if request.POST["radio_e_wday_e_time"]=="ON":
