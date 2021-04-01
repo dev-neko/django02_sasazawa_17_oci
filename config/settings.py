@@ -7,10 +7,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # DEBUG=False
 DEBUG=True
 ALLOWED_HOSTS = ['*']
-# os.environ だと存在しない場合は KeyError を raise するけど、os.environ.get だと存在しない場合は None を返してエラーは発生しないので
-# if not DEBUG:
-#     SECRET_KEY=os.environ['SECRET_KEY']
-# ↑これは多分不要
 SECRET_KEY=os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
@@ -118,9 +114,6 @@ try:
     from .local_settings import *
 except ImportError:
     pass
-
-# if not DEBUG:
-#     SECRET_KEY=os.environ['SECRET_KEY']
 
 ##################
 # Authentication #

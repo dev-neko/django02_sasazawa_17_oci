@@ -1,10 +1,34 @@
-clone した後に1回だけ
-config/generate_secretkey_setting.py
-を実行して SECRET_KEY の生成を行い local_settings.py に記載して、Herokuの環境変数にも設定する
-
-最低限必要なパッケージを一括でインストールする
+「プロジェクト・インタープリター」から仮想環境を作成し、仮想環境へパッケージを一括でインストールする
 pip install -r requirements.txt
 
-.gitignore に
-local_settings.py
-を追加する
+Django をインストールした後に1回だけ
+config/generate_secretkey_setting.py
+を実行して SECRET_KEY の生成を行い local_settings.py に記載する
+
+.gitignore の
+# local_settings.py
+のコメントアウトを外す
+local_settings.py が push されると createsuperuser できない
+
+migrations ファイルは Heroku では作成できないのでローカルで作成する
+python manage.py makemigrations
+じゃなくて
+python manage.py makemigrations applications
+？
+python manage.py migrate
+
+clone したプロジェクトの紐づけを削除し、新しくリポジトリを作成する
+
+Heroku の設定はここを参考にする
+https://qiita.com/shonansurvivors/items/ff2dc23ed0962c2a6f12#13-heroku%E3%81%AE%E8%A8%AD%E5%AE%9A
+
+commit push して Herokuのアプリを更新する
+
+local_settings.py の SECRET_KEY を Heroku の環境変数にも設定する
+
+push した後に models.py の内容を適用させるために Heroku の Run console でも migrate する
+python manage.py migrate
+
+Heroku で su 作成する
+python manage.py createsuperuser
+su 作成した後は admin ページで一般ユーザを作成できる
