@@ -4,11 +4,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = False
-ALLOWED_HOSTS = ['*']
-
+# DEBUG=False
 DEBUG=True
-SECRET_KEY='0c2mr9p-mjjf7490d7i!2i!)*th*ii)dd4efvijnrx1f8xwdc*'
+ALLOWED_HOSTS = ['*']
+# os.environ だと存在しない場合は KeyError を raise するけど、os.environ.get だと存在しない場合は None を返してエラーは発生しないので
+# if not DEBUG:
+#     SECRET_KEY=os.environ['SECRET_KEY']
+# ↑これは多分不要
+SECRET_KEY=os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,13 +24,11 @@ INSTALLED_APPS = [
     'django_celery_results',
 ]
 
-# Celery設定 サーバ用
-CELERY_BROKER_URL=os.environ.get("REDIS_URL")
-# CELERY_RESULT_BACKEND=os.environ.get("REDIS_URL")
-CELERY_RESULT_BACKEND = "django-db"
-# これは開発環境だと local_settings あってもエラーになる
-# CELERY_BROKER_URL=os.environ['REDIS_URL']
-# CELERY_RESULT_BACKEND=os.environ['REDIS_URL']
+# Celery設定 REDIS_URL が見つからないローカル環境では第二引数を適用
+CELERY_BROKER_URL=os.environ.get('REDIS_URL','redis://localhost')
+CELERY_RESULT_BACKEND=os.environ.get('REDIS_URL','redis://localhost')
+# これにするとDjangoと同じポスグレに結果が保存される
+# CELERY_RESULT_BACKEND = "django-db"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,8 +119,8 @@ try:
 except ImportError:
     pass
 
-if not DEBUG:
-    SECRET_KEY=os.environ['SECRET_KEY']
+# if not DEBUG:
+#     SECRET_KEY=os.environ['SECRET_KEY']
 
 ##################
 # Authentication #

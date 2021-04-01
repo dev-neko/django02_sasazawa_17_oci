@@ -193,12 +193,6 @@
 						{% endfor %}
 					</select>
 				</p>
-				<!-- 表示件数 -->
-				<!--<p>
-					<label><input type="radio" name="radio_dispn" value="20" checked="checked"> 20件ごと</label>
-					<label><input type="radio" name="radio_dispn" value="50"> 50件ごと</label>
-					<label><input type="radio" name="radio_dispn" value="100"> 100件ごと</label>
-				</p>-->
 				<!-- 自動延長無しフィルタ -->
 				<p>
 					<span class="d-flex align-items-center">
@@ -303,7 +297,7 @@
 					{% endif %}
 				</p>
 				<!-- 検索ボタン -->
-				<p><input type="submit" value="検索" style="width:100%"></p>
+				<p><input type="submit" name="srch_submit_btn" value="検索" style="width:100%"></p>
 				<!-- DB連携 -->
 				<span class="d-flex align-items-center">
 						<span>検索条件保存・読込・削除</span>
@@ -440,6 +434,5 @@
 			 });
 		});
 		*/
-
 	</script>
 </html>
