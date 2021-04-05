@@ -14,7 +14,7 @@ migrations ファイルは Heroku では作成できないのでローカルで�
 python manage.py makemigrations
 python manage.py migrate
 
-clone したプロジェクトの紐づけを削除し、新しくリポジトリを作成する
+clone したプロジェクトの紐づけを削除し、master で新しくリポジトリを作成する
 
 Heroku の設定はここを参考にする
 https://qiita.com/shonansurvivors/items/ff2dc23ed0962c2a6f12#13-heroku%E3%81%AE%E8%A8%AD%E5%AE%9A

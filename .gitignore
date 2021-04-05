@@ -4,4 +4,4 @@ staticfiles
 db.sqlite3
 *.py[co]$
 .idea
-# local_settings.py
+local_settings.py
