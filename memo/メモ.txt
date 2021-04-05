@@ -1,5 +1,6 @@
 # DEBUGは切り替えなくても実行可能
 python manage.py runserver
+celery -A config worker -l INFO -P eventlet --pool=solo
 
 # DB で1度実行すればデータは消えないので再度実行する必要は無い
 # su だけは Heroku の Run console から作成する必要がある
@@ -21,7 +22,7 @@ worker: celery -A config worker -l INFO
 --pool=solo
 # 付けたら勝手にtask実行してたので消した
 
-# .delay の戻り値のタスクIDからでも、その場なら .state とかで進行状況を取得できるけど、html から post されたタスクIDではでは取得できないので AsyncResult を使用してタスクの最新の進行状況を取得する
+# .delay の戻り値のタスクIDからでも、その場なら .state とかで進行状況を取得できるけど、html から post されたタスクIDでは取得できないので AsyncResult を使用してタスクの最新の進行状況を取得する
 
 # os.environ だと存在しない場合は KeyError を raise するけど、os.environ.get だと存在しない場合は None を返してエラーは発生しないので
 # if not DEBUG:

@@ -12,9 +12,6 @@ local_settings.py が push されると createsuperuser できない
 
 migrations ファイルは Heroku では作成できないのでローカルで作成する
 python manage.py makemigrations
-じゃなくて
-python manage.py makemigrations applications
-？
 python manage.py migrate
 
 clone したプロジェクトの紐づけを削除し、新しくリポジトリを作成する
