@@ -1,2 +1,2 @@
 web: gunicorn config.wsgi
-worker: celery -A config worker -l INFO
+web: python manage.py custom_command
