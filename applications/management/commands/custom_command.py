@@ -10,7 +10,7 @@ class Command(BaseCommand):
 		# t = SearchQueryModel.objects.all()
 		# self.stdout.write(self.style.SUCCESS("all Topic=%s" % t))
 
-		SearchQueryModel.objects.create(id=1,md_query_name=datetime.datetime.now())
+		# SearchQueryModel.objects.create(id=1,md_query_name=datetime.datetime.now())
 
 		while True:
 			tmp_db=SearchQueryModel.objects.get(id=1)
