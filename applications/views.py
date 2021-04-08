@@ -26,62 +26,41 @@ def tame01_output(request):
 		return render(request,'applications/tame01_pending.html',django_template_data)
 
 
-def input_v4(request):
-	if request.user.is_authenticated:
-		# ここで初期化しないとリロードしても検索条件消えない
-		dt_read_db_data=[]
-		# フォームに入力する初期データ
-		dt_exists_db_data={'exists_db_data':SearchQueryModel.objects.all()}
-		dt_wday_data={"0":"日曜日","1":"月曜日","2":"火曜日","3":"水曜日","4":"木曜日","5":"金曜日","6":"土曜日"}
-		dt_time_data={str(x):str(x)+"時" for x in range(24)}
-		dt_analysis_pages_data={str(x):str(x)+"ページ目" for x in range(1,31)}
-		dt_ana_end_spec_data=['入札が0件になるページまで検索','新着のNEWの印がなくなるページまで検索']
-		# 検索条件保存ボタンか検索条件呼び出しボタンが押されたときの処理
-		# これを付けないとリロードしたときにも保存処理が行われる
-		if request.method=='POST':
-			# ボタンを押したときnameでボタンを判定
-			if request.POST["db_action_btn"]=="save":
-				# idを指定しないと最後に追加される
-				SearchQueryModel.objects.create(
-					md_query_name=request.POST["query_name"],
-					md_radio_url=request.POST["radio_url"],
-					md_src_url=request.POST["src_raw_url"],
-					md_seller_url=request.POST["src_seller_url"],
-					md_radio_e_wday_e_time=request.POST["radio_e_wday_e_time"],
-					md_e_wday=request.POST["select_e_wday"],
-					md_e_time=request.POST["select_e_time"],
-					# md_analysis_pages=request.POST["analysis_pages"],
-					md_analysis_pages_radio=request.POST["radio_analysis_pages"],
-					md_analysis_pages_str=request.POST["analysis_pages_str"],
-					md_analysis_pages_end=request.POST["analysis_pages_end"],
-					md_radio_ana_end_spec=request.POST["radio_ana_end_spec"],
-					md_ana_end_spec=request.POST["ana_end_spec"],
-					md_auto_ext=request.POST["radio_auto_ext"],
-					md_rate_radio=request.POST["radio_rate"],
-					md_rate=request.POST["rate"],
-					md_exclude_id_radio=request.POST["radio_exclude_id"],
-					md_exclude_id=request.POST["exclude_id"],
-					md_exclude_titledesc_radio=request.POST["radio_exclude_titledesc"],
-					md_exclude_titledesc=request.POST["exclude_titledesc"],
-				)
-				# 登録後は最新のDBの内容を読み込んでDjangoテンプレートに渡す
-				dt_read_db_data={'read_db_data':SearchQueryModel.objects.order_by("id").last()}
-			elif request.POST["db_action_btn"]=="read":
-				dt_read_db_data={'read_db_data':SearchQueryModel.objects.get(id=request.POST["select_db_data"])}
-			elif request.POST["db_action_btn"]=="delete":
-				SearchQueryModel.objects.filter(id=request.POST["select_db_data"]).delete()
-			elif request.POST["db_action_btn"]=="all_delete":
-				SearchQueryModel.objects.all().delete()
-		dt_data={'dt_exists_db_data':dt_exists_db_data,
-						 'dt_read_db_data':dt_read_db_data,
-						 'dt_wday_data':dt_wday_data,
-						 'dt_time_data':dt_time_data,
-						 'dt_analysis_pages_data':dt_analysis_pages_data,
-						 'dt_ana_end_spec_data':dt_ana_end_spec_data,
-						 }
-		return render(request, 'applications/input_v4.html', dt_data)
-	else:
-		return HttpResponseRedirect('/accounts/login/')
+# def input_v1(request):
+# 	if request.user.is_authenticated:
+# 		# ここで初期化しないとリロードしても検索条件消えない
+# 		dt_read_db_data=[]
+# 		# フォームに入力する初期データ
+# 		dt_exists_db_data={'exists_db_data':SearchQueryModel.objects.all()}
+# 		# 検索条件保存ボタンか検索条件呼び出しボタンが押されたときの処理
+# 		# これを付けないとリロードしたときにも保存処理が行われる
+# 		if request.method=='POST':
+# 			# ボタンを押したときnameでボタンを判定
+# 			if request.POST["db_action_btn"]=="save":
+# 				# idを指定しないと最後に追加される
+# 				SearchQueryModel.objects.create(
+# 					md_query_name=request.POST['query_name'],
+# 					md_or_title=request.POST['or_title'],
+# 					md_ex_title=request.POST['ex_title'],
+# 					md_or_desc=request.POST['or_desc'],
+# 					md_ex_desc=request.POST['ex_desc'],
+# 					md_price_min=request.POST['price_min'],
+# 					md_price_max=request.POST['price_max'],
+# 				)
+# 				# 登録後は最新のDBの内容を読み込んでDjangoテンプレートに渡す
+# 				dt_read_db_data={'read_db_data':SearchQueryModel.objects.order_by("id").last()}
+# 			elif request.POST["db_action_btn"]=="read":
+# 				dt_read_db_data={'read_db_data':SearchQueryModel.objects.get(id=request.POST["select_db_data"])}
+# 			elif request.POST["db_action_btn"]=="delete":
+# 				SearchQueryModel.objects.filter(id=request.POST["select_db_data"]).delete()
+# 			elif request.POST["db_action_btn"]=="all_delete":
+# 				SearchQueryModel.objects.all().delete()
+# 		dt_data={'dt_exists_db_data':dt_exists_db_data,
+# 						 'dt_read_db_data':dt_read_db_data,
+# 						 }
+# 		return render(request, 'applications/input_v1.html', dt_data)
+# 	else:
+# 		return HttpResponseRedirect('/accounts/login/')
 
 def output_v4(request):
 	# print(request.POST)
@@ -131,3 +110,58 @@ def output_v4(request):
 	else:
 		django_template_data={'celery_task':celery_task}
 		return render(request,'applications/pending.html',django_template_data)
+
+
+
+
+def input_v1(request):
+	if request.user.is_authenticated:
+		# ここで初期化しないとリロードしても検索条件消えない
+		read_db=[]
+		# DBに保存されている全ての内容を取得
+		exists_db=SearchQueryModel.objects.all()
+		# 検索条件保存ボタンか検索条件呼び出しボタンが押されたときの処理
+		# これを付けないとリロードしたときにも保存処理が行われる
+		if request.method=='POST':
+			# ボタンを押したときnameでボタンを判定
+			if request.POST["db_action_btn"]=="save":
+				# チェックボックスの内容をリストにすると空でもエラー出ない
+				if len(request.POST.getlist('alert_sw_first')):
+					alert_sw_first_data='checked'
+				else:
+					alert_sw_first_data='nocheck'
+				# idを指定しないと最後に追加される
+				SearchQueryModel.objects.create(
+					md_query_name=request.POST['query_name'],
+					md_or_title=request.POST['or_title'],
+					md_ex_title=request.POST['ex_title'],
+					md_or_desc=request.POST['or_desc'],
+					md_ex_desc=request.POST['ex_desc'],
+					md_price_min=request.POST['price_min'],
+					md_price_max=request.POST['price_max'],
+					md_alert_sw=alert_sw_first_data,
+				)
+				print(alert_sw_first_data)
+				# 登録後は最新のDBの内容を読み込んでDjangoテンプレートに渡す
+				read_db=SearchQueryModel.objects.order_by("id").last()
+			elif request.POST["db_action_btn"]=="read":
+				read_db=SearchQueryModel.objects.get(id=request.POST["select_db_data"])
+			elif request.POST["db_action_btn"]=="delete":
+				SearchQueryModel.objects.filter(id=request.POST["select_db_data"]).delete()
+			elif request.POST["db_action_btn"]=="all_delete":
+				SearchQueryModel.objects.all().delete()
+			# alert_sw の更新、exists_db 更新してないのに何でボタンクリックしたら変更反映されてる？
+			elif request.POST["db_action_btn"]=="alert_sw":
+				for sqm_obj in SearchQueryModel.objects.all():
+					tmp_db=SearchQueryModel.objects.get(id=sqm_obj.id)
+					if str(sqm_obj.id) in request.POST.getlist('alert_sw_all'):
+						tmp_db.md_alert_sw='checked'
+					else:
+						tmp_db.md_alert_sw='nocheck'
+					tmp_db.save()
+		dt_data={'exists_db':exists_db,
+						 'read_db':read_db,
+						 }
+		return render(request, 'applications/input_v1.html', dt_data)
+	else:
+		return HttpResponseRedirect('/accounts/login/')
