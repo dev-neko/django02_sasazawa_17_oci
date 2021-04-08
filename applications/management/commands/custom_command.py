@@ -1,5 +1,5 @@
-import datetime
 import time
+from datetime import datetime
 from applications.models import SearchQueryModel
 from django.core.management.base import BaseCommand, CommandError
 
@@ -14,9 +14,9 @@ class Command(BaseCommand):
 
 		while True:
 			tmp_db=SearchQueryModel.objects.get(id=1)
-			dt_now=datetime.datetime.now()
+			dt_now=datetime.now()
 			tmp_db.md_query_name=dt_now
 			# self.stdout.write(dt_now)
-			self.stdout.write(self.style.SUCCESS(dt_now))
+			self.stdout.write(self.style.SUCCESS(str(dt_now)))
 			tmp_db.save()
 			time.sleep(1)
