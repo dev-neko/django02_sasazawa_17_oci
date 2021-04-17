@@ -396,6 +396,36 @@ def main_process_v2(self):
 	finally:
 		self.stdout.write(str(f'異常終了したので driver.quit()'))
 		driver.quit()
+#
+def main_process_netmall_only(self):
+	# selenium を起動
+	driver=boot_selenium()
+	# エラーで終了しても driver.quit() 出来るように追加
+	try:
+		self.stdout.write(str(f'selenium 起動完了'))
+		# netmall
+		while_count_netmall=0
+		old_url_list_netmall=get_url_list_netmall()
+		while True:
+			# netmall
+			while_count_netmall+=1
+			new_url_list_netmall=get_url_list_netmall()
+			update_url_list_netmall=list(set(new_url_list_netmall[:45])-set(old_url_list_netmall))
+			if update_url_list_netmall:
+				# winsound.Beep(1500,500)
+				# winsound.Beep(1500,500)
+				self.stdout.write(str(f'netmall で更新されたURLの数：{len(update_url_list_netmall)}\n\n'))
+				while_count_netmall=0
+				old_url_list_netmall=new_url_list_netmall
+				final_process(update_url_list_netmall,self,'netmall')
+				# ------------------------------
+				# break
+				# ------------------------------
+			else:
+				self.stdout.write(str(f'{while_count_netmall} 更新前の最新の netmall のURL\n{old_url_list_netmall[0]}\n\n'))
+	finally:
+		self.stdout.write(str(f'異常終了したので driver.quit()'))
+		driver.quit()
 
 
 # https://qiita.com/jansnap/items/d50f59dabc5da7c1d0dd
@@ -412,8 +442,8 @@ class Command(BaseCommand):
 			time.sleep(1)'''
 
 		# main_process(self)
-
-		main_process_v2(self)
+		# main_process_v2(self)
+		main_process_netmall_only(self)
 
 		# update_url_list=['https://www.net-chuko.com/buy/detail.do?ac=2142330109249',
 		# 								 'https://www.net-chuko.com/buy/detail.do?ac=2145260095408']
