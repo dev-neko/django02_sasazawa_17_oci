@@ -2,14 +2,12 @@ import pprint
 import re
 import sys
 import time
-import winsound
+# import winsound
 from datetime import datetime
 from selenium import webdriver
 from applications.models import SearchQueryModel,UserDataModel
 from django.core.management.base import BaseCommand, CommandError
 import bs4,requests
-
-
 
 # ------------------------------
 # キタムラ
@@ -368,8 +366,8 @@ def main_process_v2(self):
 			new_detail_dict_kitamura=get_detail_kitamura_selenium(driver)
 			update_detail_dict_kitamura=compare_detail_dict_kitamura(old_detail_dict_kitamura,new_detail_dict_kitamura)
 			if update_detail_dict_kitamura:
-				winsound.Beep(1500,500)
-				winsound.Beep(1500,500)
+				# winsound.Beep(1500,500)
+				# winsound.Beep(1500,500)
 				self.stdout.write(str(f'kitamura で更新されたURLの数：{len(update_detail_dict_kitamura)}\n\n'))
 				while_count_kitamura=0
 				old_detail_dict_kitamura=new_detail_dict_kitamura
@@ -384,8 +382,8 @@ def main_process_v2(self):
 			new_url_list_netmall=get_url_list_netmall()
 			update_url_list_netmall=list(set(new_url_list_netmall[:45])-set(old_url_list_netmall))
 			if update_url_list_netmall:
-				winsound.Beep(1500,500)
-				winsound.Beep(1500,500)
+				# winsound.Beep(1500,500)
+				# winsound.Beep(1500,500)
 				self.stdout.write(str(f'netmall で更新されたURLの数：{len(update_url_list_netmall)}\n\n'))
 				while_count_netmall=0
 				old_url_list_netmall=new_url_list_netmall
