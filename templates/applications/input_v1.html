@@ -1,58 +1,18 @@
 {% load static %}
-
 <html>
-	 <head>
-		<title>新着商品通知ツール</title>
-		<!-- Required meta tags -->
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
-		<!-- cb-materialbtn.css ブトスラのボタンの色を変えるライブラリ -->
-		<link rel="stylesheet" href="https://cdn.rawgit.com/maechabin/bootstrap-material-button-color/master/dist/cb-materialbtn.0.5.5.min.css">
-		<!-- fontawasome -->
-		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-
-
-
-		   <!--   jQuery・bootstrapライブラリ読み込み -->
-  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <!--  /jQuery・bootstrapライブラリ読み込み -->
-  <!--  公式からダウンロードしてね -->
-  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-  <!--  /公式からダウンロードしてね -->
-
-		<!-- jQuery、Popper.js、Bootstrap JS -->
-		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-
-
-
-
-		<style type="text/css">
-			.textarea-width100 {
-				width: 100%;
-			}
-			.textarea-width20 {
-				width: 20%;
-			}
-		</style>
+	<head>
+		{% include 'base/head.html' %}
 	</head>
 	<body>
-		<div style="padding-left:5px;margin-left:5px;padding-right:5px;margin-right:5px;">
-			<h5>新着商品通知ツール</h5>
+		{% include 'base/headder_navbar.html' %}
+		<div class="between-headder-footer">
 			<form method="post" action="">
 				{% csrf_token %}
 				<!-- 通知のONOFF -->
 				<div class="alert_sw_first">
 					<span class="d-flex align-items-center">
 						<span>通知の ON・OFF</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 								data-trigger="focus"
 								data-placement="right"
@@ -73,7 +33,7 @@
 				<p>
 					<span class="d-flex align-items-center">
 						<span>OR タイトル</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 								data-trigger="focus"
 								data-placement="right"
@@ -88,7 +48,7 @@
 				<p>
 					<span class="d-flex align-items-center">
 						<span>除外 タイトル</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 								data-trigger="focus"
 								data-placement="right"
@@ -103,7 +63,7 @@
 				<p>
 					<span class="d-flex align-items-center">
 						<span>OR 商品説明文</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 								data-trigger="focus"
 								data-placement="right"
@@ -118,7 +78,7 @@
 				<p>
 					<span class="d-flex align-items-center">
 						<span>除外 商品説明文</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 								data-trigger="focus"
 								data-placement="right"
@@ -133,7 +93,7 @@
 				<p>
 					<span class="d-flex align-items-center">
 						<span>価格フィルタ</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 										style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 										data-trigger="focus"
 										data-placement="right"
@@ -142,14 +102,14 @@
 										data-content="OFFにした状態であれば、テキストボックスに数値が入力された状態でも絞り込みは行われません。<br>数値以外は入力不可で上下キーで0.1毎に増減可能です。<br>ストアURLで解析を行う場合は無効となります。">？
 						</button>
 					</span>
-						<input type="number" name="price_min" value={{ read_db.md_price_min }} min="0" max="9999" step="1">
+						<input type="number" name="price_min" value={{ read_db.md_price_min }} min="0" max="" step="1">
 						<span>～</span>
-						<input type="number" name="price_max" value={{ read_db.md_price_max }} min="0" max="9999" step="1">
+						<input type="number" name="price_max" value={{ read_db.md_price_max }} min="0" max="" step="1">
 				</p>
 				<!-- DB連携 -->
 				<span class="d-flex align-items-center">
 						<span>検索条件保存・読込・削除</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0"
+						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
 										style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
 										data-trigger="focus"
 										data-placement="right"
@@ -161,7 +121,7 @@
 				<!-- 保存 -->
 				<p>
 					<!--<input type="text" name="query_name" size="10" class="textarea-width20">-->
-					<textarea name="query_name" class="textarea-width20" rows="1" style="vertical-align:top"></textarea>
+					<input type="text" name="query_name">
 					<button type="submit" name="db_action_btn" value='save'>保存</button>
 				</p>
 				<!-- 読み込み 削除 すべて削除 -->
@@ -188,39 +148,7 @@
 				{% endfor %}
 				<button type="submit" name="db_action_btn" value='alert_sw'>save</button>
 			</form>
-			<p>
-				<button onclick="location.href='{% url 'logout' %}'">ログアウト</button>
-			</p>
-
-
-<!-- アコーディオン コピペ用 -->
-<!--
-<div class="accordion" id="アコーディオンID">
-	<div class="card">
-		<div class="card-header" id="ヘッダーID">
-			<button class="btn btn-link" type="button"
-					data-toggle="collapse" data-target="#カードID"
-					aria-expanded="true" aria-controls="カードID">
-				商品説明
-			</button>
 		</div>
-		<div class="collapse" id="カードID"
-				aria-labelledby="ヘッダーID" data-parent="#アコーディオンID">
-			<div class="card-body">
-			ここに内容を入力
-			</div>
-		</div>
-	</div>
-</div>
--->
-
-
-
-
-		</div>
-
-
-
 	</body>
 	<script>
 		//BootstrapのPopperを使用するためのJS

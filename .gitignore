@@ -5,3 +5,4 @@ db.sqlite3
 *.py[co]$
 .idea
 local_settings.py
+chromedriver.exe
