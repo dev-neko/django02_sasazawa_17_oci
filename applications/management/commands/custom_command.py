@@ -244,7 +244,7 @@ def boot_selenium():
 	chrome_options.add_argument('--ignore-certificate-errors')
 	chrome_options.add_argument('--user-agent=aheahe')
 	chrome_options.add_argument('--blink-settings=imagesEnabled=false') #画像を非表示
-	chrome_options.add_argument('--remote-debugging-port=9222') #
+	# chrome_options.add_argument('--remote-debugging-port=9222') #
 	chrome_options.page_load_strategy='none' #
 	driver=webdriver.Chrome(options=chrome_options)
 	# driver.maximize_window()
