@@ -21,13 +21,16 @@
 										登録が正常に行われると入力欄に表示されます。<br>">？
 						</button>
 					</span>
-					{% for item in exists_db %}
-						<input type="text" name="line_token" size="50" maxlength="60" required placeholder="{{ item.md_line_token }}">
-					{% endfor %}
+					<input type="text" name="line_token" size="50" maxlength="60" placeholder="">
 				</p>
 				<p>
 					<input type="submit" value="登録">
 				</p>
+				{% for item in exists_db %}
+					<p>
+						<span>登録済みのLINEトークン：{{ item.md_line_token }}</span>
+					</p>
+				{% endfor %}
 			</form>
 		</div>
 	</body>

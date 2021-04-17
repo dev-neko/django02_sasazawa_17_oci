@@ -33,7 +33,7 @@ def input_v1(request):
 					md_price_max=request.POST['price_max'],
 					md_alert_sw=alert_sw_first_data,
 				)
-				print(alert_sw_first_data)
+				# print(alert_sw_first_data)
 				# 登録後は最新のDBの内容を読み込んでDjangoテンプレートに渡す
 				read_db=SearchQueryModel.objects.order_by("id").last()
 			elif request.POST["db_action_btn"]=="read":
@@ -61,10 +61,8 @@ def input_v1(request):
 def userdata(request):
 	if request.user.is_authenticated:
 		exists_db=UserDataModel.objects.all()
-		# for item in exists_db:
-		# 	print(item.md_line_token)
 		if request.method=='POST':
-			UserDataModel.objects.update_or_create(md_name='line token',
+			UserDataModel.objects.update_or_create(md_name='user data',
 																						 defaults={'md_line_token':request.POST['line_token']})
 		dt_data={'exists_db':exists_db}
 		return render(request, 'registration/userdata.html',dt_data)
