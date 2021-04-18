@@ -243,6 +243,13 @@ def boot_selenium():
 	chrome_options.add_argument('--blink-settings=imagesEnabled=false') #画像を非表示
 	chrome_options.page_load_strategy='none' #
 	"""
+
+	chrome_options.add_argument('--headless')
+	chrome_options.add_argument('--disable-gpu')
+	chrome_options.add_argument('--no-sandbox')
+	chrome_options.add_argument('--disable-dev-shm-usage')
+	chrome_options.add_argument('--remote-debugging-port=9222')
+
 	# chrome_options.add_argument('--remote-debugging-port=9222') #
 	# chrome_options.add_experimental_option("debuggerAddress","127.0.0.1:9222")
 	driver=webdriver.Chrome(options=chrome_options)
@@ -443,7 +450,7 @@ def main_process_selenium_test(self):
 	try:
 		# items_url_list=netmall_selenium_test(driver)
 		# self.stdout.write(str(f'最新の商品URL：{items_url_list[0]}'))
-		items_detail_dict=get_detail_kitamura_selenium_test(driver)
+		items_detail_dict=get_detail_kitamura_selenium_test(driver,self)
 		self.stdout.write(str(f'最新の商品詳細：{items_detail_dict[0]}'))
 	finally:
 		self.stdout.write(str(f'終了したので driver.quit()'))
@@ -460,12 +467,13 @@ def netmall_selenium_test(driver):
 		items_url_list.append(items.get('href'))
 	return items_url_list
 #
-def get_detail_kitamura_selenium_test(driver):
+def get_detail_kitamura_selenium_test(driver,self):
 	items_detail_dict=[]
 	add_url='https://shop.kitamura.jp'
 	src_url="https://shop.kitamura.jp/ec/list?type=u&sort=update_date&limit=20"
 	driver.get(src_url)
 	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
+	self.stdout.write(str(f'bs4obj：{bs4obj.text}'))
 	items_list=bs4obj.select('div[class="product-area"]')
 	# print(items_list)
 	for items in items_list:
