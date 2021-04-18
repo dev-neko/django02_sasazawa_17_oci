@@ -177,11 +177,8 @@ def send_line_notify(token,message,image):
 					'imageFullsize':image,
 					'imageThumbnail':image}
 	requests.post(line_notify_api, headers=headers, data=data)
-# LINEトークンをDBから取得
-for item in UserDataModel.objects.all():
-	line_notify_token=item.md_line_token
 # 辞書の内容を整形して通知
-def send_alert_content(alert_content_dict):
+def send_alert_content(alert_content_dict,line_notify_token):
 	pipe='------------------------------'
 	send_line_notify(line_notify_token,pipe,'')
 	for alert_content in alert_content_dict:
@@ -193,7 +190,7 @@ def send_alert_content(alert_content_dict):
 		send_line_notify(line_notify_token,messege,alert_content['画像URL'])
 	send_line_notify(line_notify_token,pipe,'')
 # LINE notify で送信する前処理
-def final_process(update_url_list,self,site_type):
+def final_process(update_url_list,self,site_type,line_notify_token):
 	# self.stdout.write(str(f'更新されたURL len({len(update_url_list)})\n{update_url_list}\n\n'))
 	db_all_data_dict=get_db_all_data()
 	if db_all_data_dict:
@@ -204,7 +201,7 @@ def final_process(update_url_list,self,site_type):
 		alert_content_dict=get_filter_judge(db_all_data_dict,items_detail_dict,self)
 		self.stdout.write(str(f'通知する内容\n{alert_content_dict}\n\n'))
 		if alert_content_dict:
-			send_alert_content(alert_content_dict)
+			send_alert_content(alert_content_dict,line_notify_token)
 	else:
 		self.stdout.write(str(f'通知が全てOFFだったので通知しなかった\n\n'))
 
@@ -396,6 +393,10 @@ def main_process_v2(self):
 	finally:
 		self.stdout.write(str(f'異常終了したので driver.quit()'))
 		driver.quit()
+
+# ------------------------------
+# テスト用
+# ------------------------------
 #
 def main_process_netmall_only(self):
 	# selenium を起動
@@ -407,6 +408,11 @@ def main_process_netmall_only(self):
 		while_count_netmall=0
 		old_url_list_netmall=get_url_list_netmall()
 		while True:
+			# LINEトークンをDBから取得
+			line_notify_token=''
+			for item in UserDataModel.objects.all():
+				line_notify_token=item.md_line_token
+			self.stdout.write(str(f'line_notify_token：{line_notify_token}\n\n'))
 			# netmall
 			while_count_netmall+=1
 			new_url_list_netmall=get_url_list_netmall()
@@ -417,7 +423,7 @@ def main_process_netmall_only(self):
 				self.stdout.write(str(f'netmall で更新されたURLの数：{len(update_url_list_netmall)}\n\n'))
 				while_count_netmall=0
 				old_url_list_netmall=new_url_list_netmall
-				final_process(update_url_list_netmall,self,'netmall')
+				final_process(update_url_list_netmall,self,'netmall',line_notify_token)
 				# ------------------------------
 				# break
 				# ------------------------------
@@ -426,7 +432,28 @@ def main_process_netmall_only(self):
 	finally:
 		self.stdout.write(str(f'異常終了したので driver.quit()'))
 		driver.quit()
-
+#
+def main_process_selenium_test(self):
+	# selenium を起動
+	driver=boot_selenium()
+	self.stdout.write(str(f'selenium 起動完了'))
+	# エラーで終了しても driver.quit() 出来るように追加
+	try:
+		items_url_list=netmall_selenium_test(driver)
+		self.stdout.write(str(f'最新の商品URL：{items_url_list[0]}'))
+	finally:
+		self.stdout.write(str(f'終了したので driver.quit()'))
+		driver.quit()
+def netmall_selenium_test(driver):
+	items_url_list=[]
+	src_url='https://netmall.hardoff.co.jp/cate/00010003/?p=1&s=1&pl=90'
+	driver.get(src_url)
+	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
+	items_list=bs4obj.find_all("a",attrs={'class':'p-goods__link'})
+	for items in items_list:
+		# 商品URL
+		items_url_list.append(items.get('href'))
+	return items_url_list
 
 # https://qiita.com/jansnap/items/d50f59dabc5da7c1d0dd
 class Command(BaseCommand):
@@ -443,7 +470,8 @@ class Command(BaseCommand):
 
 		# main_process(self)
 		# main_process_v2(self)
-		main_process_netmall_only(self)
+		# main_process_netmall_only(self)
+		main_process_selenium_test(self)
 
 		# update_url_list=['https://www.net-chuko.com/buy/detail.do?ac=2142330109249',
 		# 								 'https://www.net-chuko.com/buy/detail.do?ac=2145260095408']
