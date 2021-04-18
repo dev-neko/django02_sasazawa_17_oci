@@ -439,11 +439,14 @@ def main_process_selenium_test(self):
 	self.stdout.write(str(f'selenium 起動完了'))
 	# エラーで終了しても driver.quit() 出来るように追加
 	try:
-		items_url_list=netmall_selenium_test(driver)
-		self.stdout.write(str(f'最新の商品URL：{items_url_list[0]}'))
+		# items_url_list=netmall_selenium_test(driver)
+		# self.stdout.write(str(f'最新の商品URL：{items_url_list[0]}'))
+		items_detail_dict=get_detail_kitamura_selenium_test(driver)
+		self.stdout.write(str(f'最新の商品詳細：{items_detail_dict[0]}'))
 	finally:
 		self.stdout.write(str(f'終了したので driver.quit()'))
 		driver.quit()
+#
 def netmall_selenium_test(driver):
 	items_url_list=[]
 	src_url='https://netmall.hardoff.co.jp/cate/00010003/?p=1&s=1&pl=90'
@@ -454,6 +457,38 @@ def netmall_selenium_test(driver):
 		# 商品URL
 		items_url_list.append(items.get('href'))
 	return items_url_list
+#
+def get_detail_kitamura_selenium_test(driver):
+	items_detail_dict=[]
+	add_url='https://shop.kitamura.jp'
+	src_url="https://shop.kitamura.jp/ec/list?type=u&sort=update_date&limit=20"
+	driver.get(src_url)
+	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
+	items_list=bs4obj.select('div[class="product-area"]')
+	# print(items_list)
+	for items in items_list:
+		# 商品URL
+		items_url=add_url+items.select_one('a[class="product-link"]').get('href')
+		# タイトル
+		items_title=items.select_one('div[class="product-name"]').text
+		# 価格
+		items_price=items.select_one('span[class="product-price"]').text
+		# 画像URL
+		items_imgurl=items.select_one('img[class="product-img"]').get('src')
+		# 商品説明文
+		items_desc=items.select_one('span[class="product-note-val"]').text
+		items_detail_dict.append({'タイトル':items_title,
+															'価格':items_price,
+															'画像URL':items_imgurl,
+															'商品説明文':items_desc,
+															'商品URL':items_url,
+															})
+	# pprint.pprint(items_detail_dict)
+	return items_detail_dict
+
+
+
+
 
 # https://qiita.com/jansnap/items/d50f59dabc5da7c1d0dd
 class Command(BaseCommand):

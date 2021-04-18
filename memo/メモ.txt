@@ -45,3 +45,6 @@ worker: celery -A config worker -l INFO
 worker: python manage.py custom_command
 
 python manage.py custom_command
+
+JIabmeFWUUqzzPgPtU9ZszEv6TigK51CfdPOzx4DEJv
+
