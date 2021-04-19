@@ -1,9 +1,10 @@
 venv
 __pycache__
 staticfiles
-db.sqlite3
-*.py[co]$
 .idea
+*.py[co]$
+
+db.sqlite3
 local_settings.py
 chromedriver.exe
 test
