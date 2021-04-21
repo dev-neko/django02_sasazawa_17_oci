@@ -5,227 +5,18 @@ import time
 # import winsound
 from datetime import datetime
 from selenium import webdriver
-from applications.models import SearchQueryModel,UserDataModel
+from applications.models import UserDataModel,BorderDataModel
 from django.core.management.base import BaseCommand, CommandError
 import bs4,requests
-
-# ------------------------------
-# キタムラ
-# ------------------------------
-# 「カテゴリ指定なし、更新日順、100件表示」でURLのリストを取得
-def get_url_list_kitamura():
-	items_url_list=[]
-	add_url='https://www.net-chuko.com'
-	src_url='https://www.net-chuko.com/buy/list.do?keyword=&ob=ud-&lc=100&pg=1'
-	src_url_parser=requests.get(src_url)
-	bs4obj=bs4.BeautifulSoup(src_url_parser.text,'html.parser')
-	items_list=bs4obj.find_all("li",attrs={'class':'item-element'})
-	for items in items_list:
-		# 商品URL
-		items_url=items.find("a",attrs={'class':'item-photo'}).get('href')
-		items_url_list.append(add_url+re.sub(r'&pp=a1-2','',items_url))
-	# print(len(items_url_list))
-	# print(items_url_list)
-	return items_url_list
-# 商品URLから必要な情報を取得
-def get_detail_kitamura(update_url_list,self):
-	add_url='https://www.net-chuko.com'
-	items_detail_dict=[]
-	while True:
-		for f_count,update_url in enumerate(update_url_list):
-			src_url_parser=requests.get(update_url)
-			bs4obj=bs4.BeautifulSoup(src_url_parser.text,'html.parser')
-			# タイトル
-			items_title=bs4obj.find("h1").text
-			if items_title=='該当する商品データがありません': continue
-			# エラーが発生した場合は break して else を飛ばして while に戻りもう一度同じところから for を実行させる
-			if items_title=='システムエラーが発生いたしました':
-				self.stdout.write(str(f'もともとのURL\n{update_url_list}\n\n'))
-				update_url_list=update_url_list[f_count:len(update_url_list)]
-				self.stdout.write(str(f'エラーが発生したURL\n{update_url}\n\n'))
-				self.stdout.write(str(f'残りのURL\n{update_url_list}\n\n'))
-				break
-			# 価格
-			try:
-				items_price=bs4obj.find("p",attrs={'class':'price'}).text
-			except AttributeError:
-				self.stdout.write(str(f'priceのエラーが表示されたので次のtryへ\n\n'))
-				try:
-					items_price=bs4obj.find("span",attrs={'class':'font-large text-red'}).text+' (税込)'
-					# self.stdout.write(str(f'次のtryで取得したprice：\n{items_price}\n\n'))
-					# sys.exit()
-				except AttributeError:
-					self.stdout.write(str(f'priceのエラーが表示されたURL；\n{update_url}\n\n'))
-					self.stdout.write(str(f'priceのエラーが表示されたソース：\n{bs4obj}\n\n'))
-					sys.exit()
-			# 画像URL
-			items_imgurl=add_url+bs4obj.find("p",attrs={'class':'img'}).find("img").get('src')
-			# 商品説明文
-			th_list=bs4obj.find_all("th",attrs={'class':'contents'})
-			items_desc=''
-			for elem in th_list:
-				if '備考' in str(elem.string) or '付属品' in str(elem.string):
-					items_desc+=elem.parent.find('td').text
-			items_detail_dict.append({'タイトル':items_title,
-																'価格':items_price,
-																'画像URL':items_imgurl,
-																'商品説明文':items_desc,
-																'商品URL':update_url,
-																})
-		else:
-			break
-	return items_detail_dict
-# キタムラの商品一覧ページから必要な情報を取得
-# サイトがリニューアルされて一覧に詳細も表示されるように変更された
-def get_detail_kitamura_selenium(driver):
-	items_detail_dict=[]
-	add_url='https://shop.kitamura.jp'
-	src_url="https://shop.kitamura.jp/ec/list?type=u&sort=update_date&limit=100"
-	driver.get(src_url)
-	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
-	items_list=bs4obj.select('div[class="product-area"]')
-	# print(items_list)
-	for items in items_list:
-		# 商品URL
-		items_url=add_url+items.select_one('a[class="product-link"]').get('href')
-		# タイトル
-		items_title=items.select_one('div[class="product-name"]').text
-		# 価格
-		items_price=items.select_one('span[class="product-price"]').text
-		# 画像URL
-		items_imgurl=items.select_one('img[class="product-img"]').get('src')
-		# 商品説明文
-		items_desc=items.select_one('span[class="product-note-val"]').text
-		items_detail_dict.append({'タイトル':items_title,
-															'価格':items_price,
-															'画像URL':items_imgurl,
-															'商品説明文':items_desc,
-															'商品URL':items_url,
-															})
-	# pprint.pprint(items_detail_dict)
-	return items_detail_dict
-# キタムラの新旧の商品詳細辞書を比較する
-def compare_detail_dict_kitamura(old_detail_dict_kitamura,new_detail_dict_kitamura):
-	update_detail_dict=[]
-	for i in new_detail_dict_kitamura[:50]:
-		for j in old_detail_dict_kitamura:
-			if i['商品URL'] in j.values():
-				break
-		else:
-			update_detail_dict.append(i)
-	return update_detail_dict
-
-# ------------------------------
-# ネットモール
-# ------------------------------
-# 「カメラカテゴリ、更新日順、90件表示」でURLのリストを取得
-def get_url_list_netmall():
-	items_url_list=[]
-	src_url='https://netmall.hardoff.co.jp/cate/00010003/?p=1&s=1&pl=90'
-	src_url_parser=requests.get(src_url)
-	bs4obj=bs4.BeautifulSoup(src_url_parser.text,'html.parser')
-	items_list=bs4obj.find_all("a",attrs={'class':'p-goods__link'})
-	for items in items_list:
-		# 商品URL
-		items_url_list.append(items.get('href'))
-	# print(len(items_url_list))
-	# print(items_url_list)
-	return items_url_list
-# 商品URLから必要な情報を取得
-def get_detail_netmall(update_url_list):
-	items_detail_dict=[]
-	add_url='https://netmall.hardoff.co.jp'
-	for update_url in update_url_list:
-		src_url_parser=requests.get(update_url)
-		bs4obj=bs4.BeautifulSoup(src_url_parser.text,'html.parser')
-		# タイトル
-		try:
-			items_title=bs4obj.find("h2",attrs={'class':'p-goodsDetail__name'}).text
-		except AttributeError:
-			# カテゴリと商品名が同じ場合は商品名が省略されてカテゴリだけになる
-			items_title=bs4obj.find("p",attrs={'class':'p-goodsDetail__category'}).text
-		# 価格
-		items_price=bs4obj.find("p",attrs={'class':'p-goodsDetail__price'}).text.replace('\n','')
-		# 画像URL
-		items_imgurl=bs4obj.find("img",attrs={'class':'p-goodsDetail__mainImg js-lightbox js-object-fit'}).get('src')
-		if items_imgurl=='/images/goods/blankimg_itemphoto_noimage.png':
-			items_imgurl=add_url+items_imgurl
-		# 商品説明文
-		tr_list=bs4obj.find("div",attrs={'class':'p-goodsGuide__body'}).find_all("tr")
-		items_desc=''
-		for elem in tr_list:
-			if '付属レンズ'==elem.find('th').text or '特徴・備考'==elem.find('th').text:
-				items_desc+=elem.find('td').text
-		items_detail_dict.append({'タイトル':items_title.replace('　',' '),
-															'価格':items_price,
-															'画像URL':items_imgurl,
-															'商品説明文':items_desc.replace('　',' '),
-															'商品URL':update_url,
-															})
-	# print(items_detail_dict)
-	# print(items_detail_dict[2]['商品説明文'])
-	return items_detail_dict
-
-# ------------------------------
-# LINE notify
-# ------------------------------
-# LINEで通知を送信する、画像サムネイル表示も可能
-def send_line_notify(token,message,image):
-	line_notify_api = 'https://notify-api.line.me/api/notify'
-	headers = {'Authorization': f'Bearer {token}'}
-	data = {'message': message,
-					'imageFullsize':image,
-					'imageThumbnail':image}
-	requests.post(line_notify_api, headers=headers, data=data)
-# 辞書の内容を整形して通知
-def send_alert_content(alert_content_dict,line_notify_token):
-	pipe='------------------------------'
-	send_line_notify(line_notify_token,pipe,'')
-	for alert_content in alert_content_dict:
-		messege=f"\n検索条件名：{alert_content['検索条件名']}\n" \
-						f"タイトル：{alert_content['タイトル']}\n" \
-						f"価格：{alert_content['価格']}\n" \
-						f"商品URL：{alert_content['商品URL']}"
-		# f"商品説明文：{alert_content['商品説明文']}\n"
-		send_line_notify(line_notify_token,messege,alert_content['画像URL'])
-	send_line_notify(line_notify_token,pipe,'')
-# LINE notify で送信する前処理
-def final_process(update_url_list,self,site_type,line_notify_token):
-	# self.stdout.write(str(f'更新されたURL len({len(update_url_list)})\n{update_url_list}\n\n'))
-	db_all_data_dict=get_db_all_data()
-	if db_all_data_dict:
-		if site_type=='kitamura':
-			items_detail_dict=update_url_list
-		elif site_type=='netmall':
-			items_detail_dict=get_detail_netmall(update_url_list)
-		alert_content_dict=get_filter_judge(db_all_data_dict,items_detail_dict,self)
-		self.stdout.write(str(f'通知する内容\n{alert_content_dict}\n\n'))
-		if alert_content_dict:
-			send_alert_content(alert_content_dict,line_notify_token)
-	else:
-		self.stdout.write(str(f'通知が全てOFFだったので通知しなかった\n\n'))
+from selenium.webdriver.support.select import Select
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 # ------------------------------
 # その他
 # ------------------------------
-# DBの検索条件を取得
-def get_db_all_data():
-	db_all_data_dict=[]
-	for sqm_obj in SearchQueryModel.objects.all():
-		if sqm_obj.md_alert_sw=='checked':
-			db_all_data_dict.append({'検索条件名':sqm_obj.md_query_name,
-											'ORタイトル':sqm_obj.md_or_title,
-											'除外タイトル':sqm_obj.md_ex_title,
-											'OR商品説明文':sqm_obj.md_or_desc,
-											'除外商品説明文':sqm_obj.md_ex_desc,
-											'最低価格':sqm_obj.md_price_min,
-											'最高価格':sqm_obj.md_price_max,
-											})
-	return db_all_data_dict
 # selenium設定
 def boot_selenium():
 	chrome_options=webdriver.ChromeOptions()
-	"""
 	# アダプタエラー、自動テスト…、を非表示
 	chrome_options.add_experimental_option("excludeSwitches",['enable-automation',
 																														'enable-logging'])
@@ -243,268 +34,141 @@ def boot_selenium():
 	chrome_options.add_argument('--blink-settings=imagesEnabled=false') #画像を非表示
 	chrome_options.page_load_strategy='none' #
 	"""
-
 	chrome_options.add_argument('--headless')
 	chrome_options.add_argument('--disable-gpu')
 	chrome_options.add_argument('--no-sandbox')
 	chrome_options.add_argument('--disable-dev-shm-usage')
 	chrome_options.add_argument('--remote-debugging-port=9222')
-
+	"""
 	# chrome_options.add_argument('--remote-debugging-port=9222') #
 	# chrome_options.add_experimental_option("debuggerAddress","127.0.0.1:9222")
 	driver=webdriver.Chrome(options=chrome_options)
 	# driver.maximize_window()
 	return driver
-# 検索条件と比較して全てOKなら items_detail_dict に検索条件名を付加して返す
-def get_filter_judge(db_all_data_dict,items_detail_dict,self):
-	alert_content_dict=[]
-	for db_all_data in db_all_data_dict:
-		for items_detail in items_detail_dict:
-			filter_judge=[]
-			# ORタイトル のフィルタ
-			for filter_data in db_all_data['ORタイトル'].split(' '):
-				if filter_data in items_detail['タイトル'] or db_all_data['ORタイトル']=='':
-					filter_judge.append("OK")
-					break
+# LINEとメールの通知用に整理
+def get_excel_parser(excel_contents):
+	ex_str="\n"
+	for i in excel_contents:
+		for count,n in enumerate(i):
+			if count==len(i)-1:
+				ex_str=ex_str+"開放予定日："+n+"\n"
 			else:
-				filter_judge.append("NG")
-			# 除外タイトル のフィルタ
-			for filter_data in db_all_data['除外タイトル'].split(' '):
-				if db_all_data['除外タイトル']=='':
-					filter_judge.append("OK")
-					break
-				if filter_data in items_detail['タイトル']:
-					filter_judge.append("NG")
-					break
-			else:
-				filter_judge.append("OK")
-			# OR商品説明文 のフィルタ
-			for filter_data in db_all_data['OR商品説明文'].split(' '):
-				if filter_data in items_detail['商品説明文'] or db_all_data['OR商品説明文']=='':
-					filter_judge.append("OK")
-					break
-			else:
-				filter_judge.append("NG")
-			# 除外商品説明文 のフィルタ
-			for filter_data in db_all_data['除外商品説明文'].split(' '):
-				if db_all_data['除外商品説明文']=='':
-					filter_judge.append("OK")
-					break
-				if filter_data in items_detail['商品説明文']:
-					filter_judge.append("NG")
-					break
-			else:
-				filter_judge.append("OK")
-			# 価格 のフィルタ
-			if db_all_data['最低価格']=='':
-				min_price=0
-			else:
-				min_price=int(db_all_data['最低価格'])
-			if db_all_data['最高価格']=='':
-				max_price=sys.maxsize
-			else:
-				max_price=int(db_all_data['最高価格'])
-			if min_price <= int(re.sub(r'[(税込)¥円,]','',items_detail['価格'])) <= max_price:
-				filter_judge.append("OK")
-			else:
-				filter_judge.append("NG")
-			# filter_judgeにNGが含まれていなければappendする
-			if "NG" not in filter_judge:
-				items_detail['検索条件名']=db_all_data['検索条件名']
-				# dict を append するとなぜか 検索条件名 が上書きされるので以下の記事を参考にした
-				# https://gist.github.com/dogrunjp/9748789
-				alert_content_dict.append(items_detail.copy())
-			self.stdout.write(str(f'db_all_data\n{db_all_data}\n'
-														f'items_detail\n{items_detail}\n'
-														f'filter_judge\n{filter_judge}\n\n'))
-		# self.stdout.write(str(f'alert_content_dict\n{alert_content_dict}\n\n'))
-	return alert_content_dict
+				ex_str=ex_str+n+"\n"
+		ex_str=ex_str+"\n"
+	ex_str=ex_str.rstrip("\n")
+	return ex_str
+# メールの送信
+def outlook_mail_send_smtp_starttls(to_email,subject,message):
+	from email.mime.text import MIMEText
+	import smtplib
+	try:
+		# SMTP認証情報
+		account="j9fz5w65j2e9hkl2bn3q@outlook.com"
+		password="e9j7c25w6E6l63qsUv3K"
+
+		# 送受信先
+		from_email=account
+
+		# MIMEの作成
+		msg=MIMEText(message,"plain")
+		msg["Subject"]=subject
+		msg["To"]=to_email
+		msg["From"]=from_email
+
+		# メール送信処理
+		server=smtplib.SMTP("smtp.office365.com",587)
+		server.starttls()
+		server.login(account,password)
+		server.send_message(msg)
+		server.quit()
+	except:
+		pass
+# LINEで通知を送信する、画像サムネイル表示も可能
+def send_line_notify(token,message,image):
+	line_notify_api = 'https://notify-api.line.me/api/notify'
+	headers = {'Authorization': f'Bearer {token}'}
+	data = {'message': message,
+					'imageFullsize':image,
+					'imageThumbnail':image}
+	requests.post(line_notify_api, headers=headers, data=data)
 
 # ------------------------------
-# 新着を検出して通知を行う
-# ------------------------------
-def main_process(self):
-	# kitamura
-	while_count_kitamura=0
-	old_url_list_kitamura=get_url_list_kitamura()
-	# netmall
-	while_count_netmall=0
-	old_url_list_netmall=get_url_list_netmall()
-	while True:
-		# kitamura
-		while_count_kitamura+=1
-		new_url_list_kitamura=get_url_list_kitamura()
-		update_url_list_kitamura=list(set(new_url_list_kitamura[:50])-set(old_url_list_kitamura))
-		if update_url_list_kitamura:
-			self.stdout.write(str(f'kitamura で更新されたURLの数：\n{len(update_url_list_kitamura)}\n\n'))
-			while_count_kitamura=0
-			old_url_list_kitamura=new_url_list_kitamura
-			final_process(update_url_list_kitamura,self,'kitamura')
-		else:
-			self.stdout.write(str(f'{while_count_kitamura} 更新前の最新の kitamura のURL\n{old_url_list_kitamura[0]}\n\n'))
-		# netmall
-		while_count_netmall+=1
-		new_url_list_netmall=get_url_list_netmall()
-		update_url_list_netmall=list(set(new_url_list_netmall[:45])-set(old_url_list_netmall))
-		if update_url_list_netmall:
-			self.stdout.write(str(f'netmall で更新されたURLの数：\n{len(update_url_list_netmall)}\n\n'))
-			while_count_netmall=0
-			old_url_list_netmall=new_url_list_netmall
-			final_process(update_url_list_netmall,self,'netmall')
-		else:
-			self.stdout.write(str(f'{while_count_netmall} 更新前の最新の netmall のURL\n{old_url_list_netmall[0]}\n\n'))
-# キタムラのリニューアルに合わせて改良
-def main_process_v2(self):
-	# selenium を起動
-	driver=boot_selenium()
-	# エラーで終了しても driver.quit() 出来るように追加
-	try:
-		self.stdout.write(str(f'selenium 起動完了'))
-		# kitamura
-		while_count_kitamura=0
-		old_detail_dict_kitamura=get_detail_kitamura_selenium(driver)
-		# netmall
-		while_count_netmall=0
-		old_url_list_netmall=get_url_list_netmall()
-		while True:
-			# kitamura
-			while_count_kitamura+=1
-			new_detail_dict_kitamura=get_detail_kitamura_selenium(driver)
-			update_detail_dict_kitamura=compare_detail_dict_kitamura(old_detail_dict_kitamura,new_detail_dict_kitamura)
-			if update_detail_dict_kitamura:
-				# winsound.Beep(1500,500)
-				# winsound.Beep(1500,500)
-				self.stdout.write(str(f'kitamura で更新されたURLの数：{len(update_detail_dict_kitamura)}\n\n'))
-				while_count_kitamura=0
-				old_detail_dict_kitamura=new_detail_dict_kitamura
-				final_process(update_detail_dict_kitamura,self,'kitamura')
-				# ------------------------------
-				# break
-				# ------------------------------
-			else:
-				self.stdout.write(str(f'{while_count_kitamura} 更新前の最新の kitamura のURL\n{old_detail_dict_kitamura[0]["商品URL"]}\n\n'))
-			# netmall
-			while_count_netmall+=1
-			new_url_list_netmall=get_url_list_netmall()
-			update_url_list_netmall=list(set(new_url_list_netmall[:45])-set(old_url_list_netmall))
-			if update_url_list_netmall:
-				# winsound.Beep(1500,500)
-				# winsound.Beep(1500,500)
-				self.stdout.write(str(f'netmall で更新されたURLの数：{len(update_url_list_netmall)}\n\n'))
-				while_count_netmall=0
-				old_url_list_netmall=new_url_list_netmall
-				final_process(update_url_list_netmall,self,'netmall')
-				# ------------------------------
-				# break
-				# ------------------------------
-			else:
-				self.stdout.write(str(f'{while_count_netmall} 更新前の最新の netmall のURL\n{old_url_list_netmall[0]}\n\n'))
-	finally:
-		self.stdout.write(str(f'異常終了したので driver.quit()'))
-		driver.quit()
-
-# ------------------------------
-# テスト用
-# ------------------------------
 #
-def main_process_netmall_only(self):
-	# selenium を起動
-	driver=boot_selenium()
-	# エラーで終了しても driver.quit() 出来るように追加
-	try:
-		self.stdout.write(str(f'selenium 起動完了'))
-		# netmall
-		while_count_netmall=0
-		old_url_list_netmall=get_url_list_netmall()
-		while True:
-			# LINEトークンをDBから取得
-			line_notify_token=''
-			for item in UserDataModel.objects.all():
-				line_notify_token=item.md_line_token
-			self.stdout.write(str(f'line_notify_token：{line_notify_token}\n\n'))
-			# netmall
-			while_count_netmall+=1
-			new_url_list_netmall=get_url_list_netmall()
-			update_url_list_netmall=list(set(new_url_list_netmall[:45])-set(old_url_list_netmall))
-			if update_url_list_netmall:
-				# winsound.Beep(1500,500)
-				# winsound.Beep(1500,500)
-				self.stdout.write(str(f'netmall で更新されたURLの数：{len(update_url_list_netmall)}\n\n'))
-				while_count_netmall=0
-				old_url_list_netmall=new_url_list_netmall
-				final_process(update_url_list_netmall,self,'netmall',line_notify_token)
-				# ------------------------------
-				# break
-				# ------------------------------
-			else:
-				self.stdout.write(str(f'{while_count_netmall} 更新前の最新の netmall のURL\n{old_url_list_netmall[0]}\n\n'))
-	finally:
-		self.stdout.write(str(f'異常終了したので driver.quit()'))
-		driver.quit()
-#
+# ------------------------------
 def main_process_selenium_test(self):
 	# selenium を起動
 	driver=boot_selenium()
 	self.stdout.write(str(f'selenium 起動完了'))
 	# エラーで終了しても driver.quit() 出来るように追加
 	try:
-		# items_url_list=netmall_selenium_test(driver)
-		# self.stdout.write(str(f'最新の商品URL：{items_url_list[0]}'))
-
-		# items_detail_dict=get_detail_kitamura_selenium_test(driver,self)
-		# self.stdout.write(str(f'最新の商品詳細：{items_detail_dict[0]}'))
-
 		selenium_sazanka(driver,self)
 	finally:
 		self.stdout.write(str(f'終了したので driver.quit()'))
 		driver.quit()
 #
-def netmall_selenium_test(driver):
-	items_url_list=[]
-	src_url='https://netmall.hardoff.co.jp/cate/00010003/?p=1&s=1&pl=90'
-	driver.get(src_url)
-	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
-	items_list=bs4obj.find_all("a",attrs={'class':'p-goods__link'})
-	for items in items_list:
-		# 商品URL
-		items_url_list.append(items.get('href'))
-	return items_url_list
-#
-def get_detail_kitamura_selenium_test(driver,self):
-	items_detail_dict=[]
-	add_url='https://shop.kitamura.jp'
-	src_url="https://shop.kitamura.jp/ec/list?type=u&sort=update_date&limit=20"
-	driver.get(src_url)
-	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
-	self.stdout.write(str(f'bs4obj：{bs4obj.text}'))
-	items_list=bs4obj.select('div[class="product-area"]')
-	# print(items_list)
-	for items in items_list:
-		# 商品URL
-		items_url=add_url+items.select_one('a[class="product-link"]').get('href')
-		# タイトル
-		items_title=items.select_one('div[class="product-name"]').text
-		# 価格
-		items_price=items.select_one('span[class="product-price"]').text
-		# 画像URL
-		items_imgurl=items.select_one('img[class="product-img"]').get('src')
-		# 商品説明文
-		items_desc=items.select_one('span[class="product-note-val"]').text
-		items_detail_dict.append({'タイトル':items_title,
-															'価格':items_price,
-															'画像URL':items_imgurl,
-															'商品説明文':items_desc,
-															'商品URL':items_url,
-															})
-	# pprint.pprint(items_detail_dict)
-	return items_detail_dict
-#
 def selenium_sazanka(driver,self):
+	# キャンセル枠公開ページを開く
 	url="https://www.yoyaku-sports.city.suginami.tokyo.jp/reselve/m_index.do"
 	driver.get(url)
-	bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
-	self.stdout.write(str(f'bs4obj：{bs4obj.text}'))
-	# return items_detail_dict
+	driver.find_element_by_xpath("//*[text()='開放予定の案内']").click()
+	Select(driver.find_element_by_name("prptyp")).select_by_visible_text("屋外テニス系")
+	driver.find_element_by_name('submit').click()
+	Select(driver.find_element_by_name("prpcod")).select_by_visible_text("テニス（硬式）")
+	driver.find_element_by_name('submit').click()
+
+	# 内容取得・整理
+	tmp_list=[]
+	excel_list=[]
+	while True:
+		bs4obj=bs4.BeautifulSoup(driver.page_source,'html.parser')
+		cb_data=bs4obj.find("form",attrs={'name':'searchObjForm'}).text.split()
+		for count,i in enumerate(cb_data):
+			if count>5 and i not in "次前" and i not in "[開放予定日]":
+				tmp_list.append(re.sub(r'[◇・\s]','',i))
+				if (count-5)%6==0:
+					excel_list.append(tmp_list)
+					tmp_list=[]
+		try:
+			driver.find_element_by_xpath("//*[text()='次']").click()
+		except NoSuchElementException:
+			break
+	driver.quit()
+	self.stdout.write(str(f'オリジナルの内容：{excel_list}'))
+
+	# 9時00分～19時00分 が含まれていた場合は5つの時間帯に修正
+	except_time_list=['9時00分～11時00分','11時00分～13時00分','13時00分～15時00分','15時00分～17時00分','17時00分～19時00分']
+	for c1,i in enumerate(excel_list):
+		if '9時00分～19時00分' in i[3]:
+			for c2,except_time in enumerate(except_time_list):
+				excel_list[c1+c2][3]=except_time
+			break
+	# self.stdout.write(str(f'複数の時間を整理した内容：{excel_list}'))
+
+	# DBにキャンセル予定枠を保存
+	BorderDataModel.objects.update_or_create(md_name='border data',
+																				defaults={'md_cancel_border':excel_list})
+
+	# LINEとメールの通知用に整理した内容を取得
+	excel_parser=get_excel_parser(excel_list)
+	# self.stdout.write(str(f'整理した内容：{excel_parser}'))
+	# LINEトークンをDBから取得
+	try:
+		user_data=UserDataModel.objects.get(md_name='user data')
+		line_token=user_data.md_line_token
+		self.stdout.write(str(f'DBから取得したLINEトークン：{line_token}'))
+		# 送信先のメールアドレスをDBから取得
+		to_email=user_data.md_to_email
+		self.stdout.write(str(f'DBから取得したメールアドレス：{to_email}'))
+	except:
+		self.stdout.write(str(f'UserDataModelが空なので通知しなかった'))
+		line_token=to_email=''
+	# LINE に通知
+	send_line_notify(line_token,excel_parser,'')
+	# メールアドレス に通知
+	subject='さざんかねっと キャンセル枠開放スケジュール'
+	outlook_mail_send_smtp_starttls(to_email,subject,excel_parser)
+
+
 
 
 
@@ -514,23 +178,5 @@ def selenium_sazanka(driver,self):
 class Command(BaseCommand):
 	help = 'crawler for test.'
 	def handle(self, *args, **options):
-		'''SearchQueryModel.objects.create(id=1,md_query_name=datetime.datetime.now())
-		while True:
-			tmp_db=SearchQueryModel.objects.get(id=1)
-			dt_now=datetime.now()
-			tmp_db.md_query_name=dt_now
-			self.stdout.write(str(dt_now))
-			tmp_db.save()
-			time.sleep(1)'''
 
-		# main_process(self)
-		# main_process_v2(self)
-		# main_process_netmall_only(self)
 		main_process_selenium_test(self)
-
-		# update_url_list=['https://www.net-chuko.com/buy/detail.do?ac=2142330109249',
-		# 								 'https://www.net-chuko.com/buy/detail.do?ac=2145260095408']
-		# items_detail_dict=get_detail_kitamura(update_url_list,self)
-		# db_all_data_dict=get_db_all_data()
-		# get_filter_judge(db_all_data_dict,items_detail_dict,self)
-		# # self.stdout.write(str(f'{}\n\n'))

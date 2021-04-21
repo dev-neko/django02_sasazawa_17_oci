@@ -8,145 +8,43 @@
 		<div class="between-headder-footer">
 			<form method="post" action="">
 				{% csrf_token %}
-				<!-- 通知のONOFF -->
-				<div class="alert_sw_first">
-					<span class="d-flex align-items-center">
-						<span>通知の ON・OFF</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-								data-trigger="focus"
-								data-placement="right"
-								data-toggle="popover"
-								data-html="true"
-								data-content="URLには解析を行うために必要となる、表示件数(&n=)、ページ番号(&b=)、表示方法は「タイトルと画像」(&mode=2)、が含まれるようにお願い致します。<br>終了する曜日と時間帯についてはWebアプリにて指定可能なためURLには含めないようにお願い致します。">？
-						</button>
-					</span>
-					<label>
-						{% if read_db.md_alert_sw == "nocheck" %}
-							<input type="checkbox" nocheck name="alert_sw_first" data-on="ON" data-off="OFF" data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary">
-						{% else %}
-							<input type="checkbox" checked name="alert_sw_first" data-on="ON" data-off="OFF" data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary">
-						{% endif %}
-					</label>
-				</div>
-				<!-- OR タイトル -->
-				<p>
-					<span class="d-flex align-items-center">
-						<span>OR タイトル</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-								data-trigger="focus"
-								data-placement="right"
-								data-toggle="popover"
-								data-html="true"
-								data-content="URLには解析を行うために必要となる、表示件数(&n=)、ページ番号(&b=)、表示方法は「タイトルと画像」(&mode=2)、が含まれるようにお願い致します。<br>終了する曜日と時間帯についてはWebアプリにて指定可能なためURLには含めないようにお願い致します。">？
-						</button>
-					</span>
-					<textarea name="or_title" class="textarea-width100" rows="2">{{ read_db.md_or_title }}</textarea>
-				</p>
-				<!-- 除外 タイトル -->
-				<p>
-					<span class="d-flex align-items-center">
-						<span>除外 タイトル</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-								data-trigger="focus"
-								data-placement="right"
-								data-toggle="popover"
-								data-html="true"
-								data-content="URLには解析を行うために必要となる、表示件数(&n=)、ページ番号(&b=)、表示方法は「タイトルと画像」(&mode=2)、が含まれるようにお願い致します。<br>終了する曜日と時間帯についてはWebアプリにて指定可能なためURLには含めないようにお願い致します。">？
-						</button>
-					</span>
-					<textarea name="ex_title" class="textarea-width100" rows="2">{{ read_db.md_ex_title }}</textarea>
-				</p>
-				<!-- OR 商品説明文 -->
-				<p>
-					<span class="d-flex align-items-center">
-						<span>OR 商品説明文</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-								data-trigger="focus"
-								data-placement="right"
-								data-toggle="popover"
-								data-html="true"
-								data-content="URLには解析を行うために必要となる、表示件数(&n=)、ページ番号(&b=)、表示方法は「タイトルと画像」(&mode=2)、が含まれるようにお願い致します。<br>終了する曜日と時間帯についてはWebアプリにて指定可能なためURLには含めないようにお願い致します。">？
-						</button>
-					</span>
-					<textarea name="or_desc" class="textarea-width100" rows="2">{{ read_db.md_or_desc }}</textarea>
-				</p>
-				<!-- 除外 商品説明文 -->
-				<p>
-					<span class="d-flex align-items-center">
-						<span>除外 商品説明文</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-								style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-								data-trigger="focus"
-								data-placement="right"
-								data-toggle="popover"
-								data-html="true"
-								data-content="URLには解析を行うために必要となる、表示件数(&n=)、ページ番号(&b=)、表示方法は「タイトルと画像」(&mode=2)、が含まれるようにお願い致します。<br>終了する曜日と時間帯についてはWebアプリにて指定可能なためURLには含めないようにお願い致します。">？
-						</button>
-					</span>
-					<textarea name="ex_desc" class="textarea-width100" rows="2">{{ read_db.md_ex_desc }}</textarea>
-				</p>
-				<!-- 価格フィルタ -->
-				<p>
-					<span class="d-flex align-items-center">
-						<span>価格フィルタ</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-										style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-										data-trigger="focus"
-										data-placement="right"
-										data-toggle="popover"
-										data-html="true"
-										data-content="OFFにした状態であれば、テキストボックスに数値が入力された状態でも絞り込みは行われません。<br>数値以外は入力不可で上下キーで0.1毎に増減可能です。<br>ストアURLで解析を行う場合は無効となります。">？
-						</button>
-					</span>
-						<input type="number" name="price_min" value={{ read_db.md_price_min }} min="0" max="" step="1">
-						<span>～</span>
-						<input type="number" name="price_max" value={{ read_db.md_price_max }} min="0" max="" step="1">
-				</p>
-				<!-- DB連携 -->
-				<span class="d-flex align-items-center">
-						<span>検索条件保存・読込・削除</span>
-						<button type="button" class="btn btn-dark rounded-circle p-0 d-flex align-items-center  justify-content-center"
-										style="width:1.3rem;height:1.3rem;position:relative;left:3px;"
-										data-trigger="focus"
-										data-placement="right"
-										data-toggle="popover"
-										data-html="true"
-										data-content="テキストボックスに検索条件名を入力して「保存」ボタンをクリックすると検索条件に名前を付けて保存が可能です。<br>保存した検索条件名をプルダウンで選択して「読込」「削除」が可能です。<br>">？
-						</button>
-					</span>
-				<!-- 保存 -->
-				<p>
-					<!--<input type="text" name="query_name" size="10" class="textarea-width20">-->
-					<input type="text" name="query_name">
-					<button type="submit" name="db_action_btn" value='save'>保存</button>
-				</p>
-				<!-- 読み込み 削除 すべて削除 -->
-				<p>
-					<select name="select_db_data">
-						{% for item in exists_db %}
-							<option value={{ item.id }}>{{ item.md_query_name }}</option>
+				<table class="table table-bordered table-hover">
+					<thead>
+						<tr>
+							<th scope="col">選択</th>
+							<th scope="col">施設</th>
+							<th scope="col">場所</th>
+							<th scope="col">開放日</th>
+							<th scope="col">開放時間</th>
+							<th scope="col">開放予定日</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in db_cancel_border %}
+							<tr>
+								{% if db_reserve_border == item %}
+									<td class="table-warning"><label><input type="radio" name="radio_reserve_border" id="reserve_border" value="['{{ item.0 }}','{{ item.1 }}','{{ item.2 }}','{{ item.3 }}','{{ item.4 }}']"></label></td>
+									<td class="table-warning">{{ item.0 }}</td>
+									<td class="table-warning">{{ item.1 }}</td>
+									<td class="table-warning">{{ item.2 }}</td>
+									<td class="table-warning">{{ item.3 }}</td>
+									<td class="table-warning">{{ item.4 }}</td>
+								{% else %}
+									<td><label><input type="radio" name="radio_reserve_border" value="['{{ item.0 }}','{{ item.1 }}','{{ item.2 }}','{{ item.3 }}','{{ item.4 }}']"></label></td>
+									<td>{{ item.0 }}</td>
+									<td>{{ item.1 }}</td>
+									<td>{{ item.2 }}</td>
+									<td>{{ item.3 }}</td>
+									<td>{{ item.4 }}</td>
+								{% endif %}
+							</tr>
 						{% endfor %}
-					</select>
-					<button type="submit" name="db_action_btn" value='read'>読込</button>
-					<button type="submit" name="db_action_btn" value='delete' onclick="return sametab_conf('')">削除</button>
-					<!--
-					<button type="submit" name="db_action_btn" value='all_delete' onclick="sametab('')">全て削除</button>
-					-->
-				</p>
-				<!-- 通知のONOFFの変更 -->
-				{% for item in exists_db %}
-					<div class="alert_sw_all">
-						<label>
-							<input type="checkbox" {{ item.md_alert_sw }} value={{ item.id }} name="alert_sw_all" data-on="ON" data-off="OFF" data-toggle="toggle" data-onstyle="primary" data-offstyle="secondary">
-							検索条件名：{{ item.md_query_name }}
-						</label>
-					</div>
-				{% endfor %}
-				<button type="submit" name="db_action_btn" value='alert_sw'>save</button>
+					</tbody>
+				</table>
+				<span class="d-flex align-items-center">
+					<button type="submit" class="btn btn-primary" name="db_action_btn" value="save">予約日の登録・削除</button>
+					{% include "base/popover_v1.html" with title="" description="登録が正常に行われると対象の予約枠が強調表示されます。<br>ラジオボタンを選択せずにクリックすると予約枠を削除します。<br>予約枠の取得は予約日当日の8時25分に行いますので、それまでにご登録下さい。<br>" only %}
+				</span>
 			</form>
 		</div>
 	</body>
