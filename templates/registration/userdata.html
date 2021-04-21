@@ -23,10 +23,10 @@
 				</p>
 				{% for item in exists_db %}
 					<p>
-						<span>登録済みのLINEトークン：{{ item.md_line_token }}</span>
+						<span id="line_token">登録済みのLINEトークン：{{ item.md_line_token }}</span>
 					</p>
 					<p>
-						<span>登録済みのメールアドレス：{{ item.md_to_email }}</span>
+						<span id="to_email">登録済みのメールアドレス：{{ item.md_to_email }}</span>
 					</p>
 				{% endfor %}
 			</form>

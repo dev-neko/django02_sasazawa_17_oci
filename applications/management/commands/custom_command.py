@@ -144,9 +144,10 @@ def selenium_sazanka(driver,self):
 			break
 	# self.stdout.write(str(f'複数の時間を整理した内容：{excel_list}'))
 
-	# DBにキャンセル予定枠を保存
+	# DBにキャンセル予定枠を保存、同時に予約する枠を削除
 	BorderDataModel.objects.update_or_create(md_name='border data',
-																				defaults={'md_cancel_border':excel_list})
+																					 defaults={'md_cancel_border':excel_list,
+																										 'md_reserve_border':''})
 
 	# LINEとメールの通知用に整理した内容を取得
 	excel_parser=get_excel_parser(excel_list)
