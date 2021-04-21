@@ -9,26 +9,26 @@
 			<form method="post" action="">
 				{% csrf_token %}
 				<!-- LINEトークン -->
-				<p>
-					{% include "base/popover_v1.html" with title="LINEトークン" description="LINEへの通知に使用するLINEトークンを登録して下さい。<br>登録が正常に行われると下部に表示されます。<br>" only %}
-					<input type="text" name="line_token" size="60" maxlength="60" placeholder="">
-				</p>
+				<div class="form-group">
+					{% include "base/popover_v1.html" with title="LINEトークン" description="LINEへの通知に使用するLINEトークンを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<input type="text" class="form-control" name="line_token" value="{{ db_line_token }}">
+				</div>
 				<!-- メールアドレス -->
-				<p>
-					{% include "base/popover_v1.html" with title="メールアドレス" description="送信先のメールアドレスを登録して下さい。<br>登録が正常に行われると下部に表示されます。<br>" only %}
-					<input type="text" name="to_email" size="60" maxlength="60" placeholder="">
-				</p>
-				<p>
-					<input type="submit" value="登録">
-				</p>
-				{% for item in exists_db %}
-					<p>
-						<span id="line_token">登録済みのLINEトークン：{{ item.md_line_token }}</span>
-					</p>
-					<p>
-						<span id="to_email">登録済みのメールアドレス：{{ item.md_to_email }}</span>
-					</p>
-				{% endfor %}
+				<div class="form-group">
+					{% include "base/popover_v1.html" with title="メールアドレス" description="送信先のメールアドレスを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<input type="text" class="form-control" name="to_email" value="{{ db_to_email }}">
+				</div>
+				<!-- さざんかねっとID -->
+				<div class="form-group">
+					{% include "base/popover_v1.html" with title="さざんかねっとID" description="さざんかねっとのIDを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<input type="text" class="form-control" name="ac_id" value="{{ db_ac_id }}">
+				</div>
+				<!-- さざんかねっとPASS -->
+				<div class="form-group">
+					{% include "base/popover_v1.html" with title="さざんかねっとパスワード" description="さざんかねっとのパスワードを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<input type="text" class="form-control" name="ac_pass" value="{{ db_ac_pass }}">
+				</div>
+				<button type="submit" class="btn btn-primary">登録</button>
 			</form>
 		</div>
 	</body>
