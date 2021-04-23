@@ -8,6 +8,8 @@
 		<div class="between-headder-footer">
 			<form method="post" action="">
 				{% csrf_token %}
+				<!-- 見出し -->
+				{% include "base/popover_headline_v1.html" with title="<h5>予約枠登録</h5>" description="キャンセル枠開放スケジュールは毎日23時00分頃に取得し、同時に登録されている予約枠を初期化するため、それ以降のご登録をお願いいたします。<br>また、登録された予約枠は予約日当日の8時25分頃にプログラムから取得を行いますので、それまでのご登録をお願いいたします。<br>" only %}
 				<table class="table table-bordered table-hover">
 					<thead>
 						<tr>
@@ -43,7 +45,7 @@
 				</table>
 				<span class="d-flex align-items-center">
 					<button type="submit" class="btn btn-primary" name="db_action_btn" value="save">予約日の登録・削除</button>
-					{% include "base/popover_v1.html" with title="" description="登録が正常に行われると対象の予約枠が強調表示されます。<br>ラジオボタンを選択せずにクリックすると予約枠を削除します。<br>予約枠の取得は予約日当日の8時25分に行いますので、それまでにご登録下さい。<br>" only %}
+					{% include "base/popover_v1.html" with title="" description="登録が正常に行われると対象の予約枠が強調表示されます。<br>ラジオボタンを選択せずにクリックすると予約枠を削除します。" only %}
 				</span>
 			</form>
 		</div>

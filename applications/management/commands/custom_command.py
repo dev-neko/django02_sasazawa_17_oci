@@ -141,7 +141,7 @@ def selenium_sazanka(driver,self):
 			for c2,except_time in enumerate(except_time_list):
 				excel_list[c1+c2][3]=except_time
 			break
-	# self.stdout.write(str(f'複数の時間を整理した内容：{excel_list}'))
+	self.stdout.write(str(f'複数の時間を整理した内容：{excel_list}'))
 
 	# DBにキャンセル予定枠を保存、同時に予約する枠を削除
 	BorderDataModel.objects.update_or_create(md_name='border data',

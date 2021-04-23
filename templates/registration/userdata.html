@@ -8,24 +8,26 @@
 		<div class="between-headder-footer">
 			<form method="post" action="">
 				{% csrf_token %}
+				<!-- 見出し -->
+				{% include "base/popover_headline_v1.html" with title="<h5>ユーザデータ登録</h5>" description="「LINEへの通知に使用するLINEトークン」「送信先のメールアドレス」「さざんかねっとのID」「さざんかねっとのパスワード」を登録して下さい。<br>登録が正常に行われるとそれぞれの入力欄に表示されます。<br>" only %}
 				<!-- LINEトークン -->
 				<div class="form-group">
-					{% include "base/popover_v1.html" with title="LINEトークン" description="LINEへの通知に使用するLINEトークンを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<span>LINEトークン</span>
 					<input type="text" class="form-control" name="line_token" value="{{ db_line_token }}">
 				</div>
 				<!-- メールアドレス -->
 				<div class="form-group">
-					{% include "base/popover_v1.html" with title="メールアドレス" description="送信先のメールアドレスを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<span>メールアドレス</span>
 					<input type="text" class="form-control" name="to_email" value="{{ db_to_email }}">
 				</div>
 				<!-- さざんかねっとID -->
 				<div class="form-group">
-					{% include "base/popover_v1.html" with title="さざんかねっとID" description="さざんかねっとのIDを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<span>さざんかねっとID</span>
 					<input type="text" class="form-control" name="ac_id" value="{{ db_ac_id }}">
 				</div>
 				<!-- さざんかねっとPASS -->
 				<div class="form-group">
-					{% include "base/popover_v1.html" with title="さざんかねっとパスワード" description="さざんかねっとのパスワードを登録して下さい。<br>登録が正常に行われると入力欄に表示されます。<br>" only %}
+					<span>さざんかねっとパスワード</span>
 					<input type="text" class="form-control" name="ac_pass" value="{{ db_ac_pass }}">
 				</div>
 				<button type="submit" class="btn btn-primary">登録</button>
