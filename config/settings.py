@@ -4,9 +4,12 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# DEBUG=True にすると本番環境でもエラー内容が表示される
 DEBUG=False
 # DEBUG=True
+
 ALLOWED_HOSTS=['*']
+
 SECRET_KEY=os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
@@ -17,14 +20,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'applications.apps.ApplicationsConfig',
-    'django_celery_results',
 ]
-
-# Celery設定 REDIS_URL が見つからないローカル環境では第二引数を適用
-CELERY_BROKER_URL=os.environ.get('REDIS_URL','redis://localhost')
-CELERY_RESULT_BACKEND=os.environ.get('REDIS_URL','redis://localhost')
-# これにするとDjangoと同じポスグレに結果が保存される
-# CELERY_RESULT_BACKEND = "django-db"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -89,18 +85,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-# https://qiita.com/shonansurvivors/items/ff2dc23ed0962c2a6f12
-# ここの方法→HTML、adminページのcss表示OK
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# STATIC_ROOT = 'staticfiles'
-
-# akiyokoさんの方法→HTML、adminページのcss表示OK
-# STATIC_URL = '/static/'
-# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-# PROJECT_NAME = os.path.basename(BASE_DIR)
-# STATIC_ROOT = 'var/www/{}/static'.format(PROJECT_NAME)
-
 # https://devcenter.heroku.com/ja/articles/django-assets
 # Herokuの方法→HTML、adminページのcss表示OK
 STATIC_URL = '/static/'
@@ -114,10 +98,3 @@ try:
     from .local_settings import *
 except ImportError:
     pass
-
-##################
-# Authentication #
-##################
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/v1/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
