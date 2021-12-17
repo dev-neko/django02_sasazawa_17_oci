@@ -1,8 +1,105 @@
 {% load static %}
 <html>
 	<head>
+		{% include 'base/head.html' %}
 	</head>
 	<body>
-		<h1>aaa</h1>
+		{% include 'base/headder_navbar.html' %}
+		<div class="between-headder-footer">
+			<h2>{% now "Y/m/d H:i:s" %}</h2>
+			<form id="ajax_form" action="{% url 'app_urls:ajax_proc' %}" method="POST">
+				{% csrf_token %}
+				<div class="form-row">
+					<!-- 日付 -->
+					<div class="col-auto">
+						<label>日付<input type="date" id="r_day" class="form-control" value="{% now 'Y-m-d' %}"></label>
+					</div>
+					<!-- 時刻 -->
+					<div class="col-auto">
+						<label>時刻<select id="r_time" class="form-control">
+							{% for item in TIME_DATA %}
+								<option>{{ item }}</option>
+							{% endfor %}
+						</select></label>
+					</div>
+					<!-- 施設名 -->
+					<div class="col-auto">
+						<label>施設名<select id="r_shisetsu" class="form-control">
+							{% for item in SHISETSU_DATA %}
+								<option>{{ item }}</option>
+							{% endfor %}
+						</select></label>
+					</div>
+					<!-- 室場名 -->
+					<div class="col-auto">
+						<label>室場名<select id="r_shitsujou" class="form-control">
+							{% for item in SHITUJOU_DATA %}
+								<option>{{ item }}</option>
+							{% endfor %}
+						</select></label>
+					</div>
+				</div>
+				<!-- ボタン群 -->
+				<span class="d-flex align-items-center">
+					<div>
+						<!-- 登録ボタン -->
+						<button onFocus="this.blur()" type="button" class="btn btn-primary" id="save_btn">登録</button>
+						<!-- 削除ボタン -->
+						<button onFocus="this.blur()" type="button" class="btn btn-danger" id="delete_btn">削除</button>
+						<!-- ajax用 -->
+						<input type="hidden" id="db_action">
+					</div>
+					{% include "base/popover_v1.html" with title="" description="登録が正常に行われると対象の予約枠が強調表示されます。<br>ラジオボタンを選択せずにクリックすると予約枠を削除します。" only %}
+				</span>
+			</form>
+			<!-- 予約内容の表示 -->
+			<p>現在の予約内容</p>
+			<div class="result">
+				{% if json_resp %}
+					<p>{{ json_resp.md_r_day }}</p>
+					<p>{{ json_resp.md_r_time }}</p>
+					<p>{{ json_resp.md_r_shisetsu }}</p>
+					<p>{{ json_resp.md_r_shitsujou }}</p>
+				{% endif %}
+			</div>
+			<!-- Toast -->
+			<!-- https://qiita.com/hibara/items/3cbe9f1206183081cf7e -->
+			<div style="position: absolute; bottom: 10; right: 10;">
+				<div class="toast" id="toast_save">
+					<div class="toast-header">
+						<strong class="mr-auto">予約内容更新通知</strong>
+						<small></small>
+						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="toast-body">
+						<p>予約内容を登録しました。</p>
+					</div>
+				</div>
+				<div class="toast" id="toast_delete">
+					<div class="toast-header">
+						<strong class="mr-auto">予約内容更新通知</strong>
+						<small></small>
+						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="toast-body">
+						<p>予約内容を削除しました。</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 外部jsファイル ajax -->
+		<script type="text/javascript" src="{% static 'js/ajax_test.js' %}"></script>
 	</body>
+	<script>
+		//BootstrapのPopperを使用するためのJS
+		(function() {
+			window.addEventListener("load", function () {
+				$('[data-toggle="popover"]').popover();
+			});
+		})();
+	</script>
 </html>
