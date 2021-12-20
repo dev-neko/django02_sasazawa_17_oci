@@ -38,6 +38,14 @@
 							{% endfor %}
 						</select></label>
 					</div>
+					<!-- コート番号 -->
+					<div class="col-auto">
+						<label>コート番号<select id="r_corder" class="form-control">
+							{% for item in CORDER_DATA %}
+								<option>{{ item|add:'1' }}</option>
+							{% endfor %}
+						</select></label>
+					</div>
 				</div>
 				<!-- ボタン群 -->
 				<span class="d-flex align-items-center">
@@ -60,6 +68,7 @@
 					<p>{{ json_resp.md_r_time }}</p>
 					<p>{{ json_resp.md_r_shisetsu }}</p>
 					<p>{{ json_resp.md_r_shitsujou }}</p>
+					<p>{{ json_resp.md_r_corder }}</p>
 				{% endif %}
 			</div>
 			<!-- Toast -->

@@ -46,6 +46,7 @@ $('#ajax_form').on('submit', function(e) { //---(1)
 			'r_time':$('#r_time').val(),
 			'r_shisetsu':$('#r_shisetsu').val(),
 			'r_shitsujou':$('#r_shitsujou').val(),
+			'r_corder':$('#r_corder').val(),
 			'db_action':$('#db_action').val(),
 		},
 		// データ形式(ここではjson)を指定
@@ -65,6 +66,7 @@ $('#ajax_form').on('submit', function(e) { //---(1)
 			$('.result').append('<p>時間：' + response.md_r_time + '</p>');
 			$('.result').append('<p>施設名：' + response.md_r_shisetsu + '</p>');
 			$('.result').append('<p>室場名：' + response.md_r_shitsujou + '</p>');
+			$('.result').append('<p>コート番号：' + response.md_r_corder + '</p>');
 		} else {
 			// 削除時のtoast表示
 			$("#toast_delete").toast({delay:3000}).toast('show');

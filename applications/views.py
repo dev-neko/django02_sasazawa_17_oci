@@ -36,22 +36,26 @@ def input_v1(request):
 								 '庭球場（照明なし）',
 								 'テニスコート照明付',
 								 'テニスコート照明なし']
+	CORDER_DATA=[i for i in range(10)]
 	# ページ読み込み時にDBのデータを読み込む
 	# jsonに変換してもただの文字列の様なのでevalしてそこから取り出す
 	try:
 		borderdata=eval(serializers.serialize('json',BorderDataModel.objects.all()))
+		print(BorderDataModel.objects.all())
 		json_resp=borderdata[0]["fields"]
 	except:
 		json_resp={}
+	print(json_resp)
 	base_data={'TIME_DATA':TIME_DATA,
 						 'SHISETSU_DATA':SHISETSU_DATA,
 						 'SHITUJOU_DATA':SHITUJOU_DATA,
+						 'CORDER_DATA':CORDER_DATA,
 						 'json_resp':json_resp}
 	return render(request, 'applications/input_v1.html', base_data)
 
 def ajax_proc(request):
 	if request.method=='POST':
-		# print(request.POST)
+		print(request.POST)
 		# 保存ボタン
 		if request.POST["db_action"]=="save":
 			BorderDataModel.objects.update_or_create(
@@ -59,7 +63,8 @@ def ajax_proc(request):
 				defaults={'md_r_day':request.POST.get('r_day'),
 									'md_r_time':request.POST.get('r_time'),
 									'md_r_shisetsu':request.POST.get('r_shisetsu'),
-									'md_r_shitsujou':request.POST.get('r_shitsujou')})
+									'md_r_shitsujou':request.POST.get('r_shitsujou'),
+									'md_r_corder':request.POST.get('r_corder'),})
 			# jsonに変換してもただの文字列の様なのでevalしてそこから取り出す
 			borderdata=eval(serializers.serialize('json',BorderDataModel.objects.all()))
 			json_resp=borderdata[0]["fields"]
