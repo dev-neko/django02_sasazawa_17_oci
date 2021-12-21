@@ -6,7 +6,7 @@
 	<body>
 		{% include 'base/headder_navbar.html' %}
 		<div class="between-headder-footer">
-			<h2>{% now "Y/m/d H:i:s" %}</h2>
+			<h4>予約枠の登録</h4>
 			<form id="ajax_form" action="{% url 'app_urls:ajax_proc' %}" method="POST">
 				{% csrf_token %}
 				<div class="form-row">
@@ -57,7 +57,7 @@
 						<!-- ajax用 -->
 						<input type="hidden" id="db_action">
 					</div>
-					{% include "base/popover_v1.html" with title="" description="登録が正常に行われると対象の予約枠が強調表示されます。<br>ラジオボタンを選択せずにクリックすると予約枠を削除します。" only %}
+					{% include "base/popover_v1.html" with title="" description="<br>" only %}
 				</span>
 			</form>
 			<!-- 予約内容の表示 -->
