@@ -64,11 +64,11 @@
 			<p>現在の予約内容</p>
 			<div class="result">
 				{% if json_resp %}
-					<p>{{ json_resp.md_r_day }}</p>
-					<p>{{ json_resp.md_r_time }}</p>
-					<p>{{ json_resp.md_r_shisetsu }}</p>
-					<p>{{ json_resp.md_r_shitsujou }}</p>
-					<p>{{ json_resp.md_r_corder }}</p>
+					<p>日付：{{ json_resp.md_r_day }}</p>
+					<p>時間：{{ json_resp.md_r_time }}</p>
+					<p>施設名：{{ json_resp.md_r_shisetsu }}</p>
+					<p>室場名：{{ json_resp.md_r_shitsujou }}</p>
+					<p>コート番号：{{ json_resp.md_r_corder }}</p>
 				{% endif %}
 			</div>
 			<!-- Toast -->
