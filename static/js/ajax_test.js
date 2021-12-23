@@ -56,25 +56,24 @@ $('#ajax_form').on('submit', function(e) { //---(1)
 	// views.pyから受け取ったJSONデータをページに表示
 	.done(function(response){
 		// 内容を初期化
-		$('.result_01').empty();
-		$('.result_02').empty();
+		$('#result_table td').empty();
 		// response.resp_01が空でなければ
 		if (!(jQuery.isEmptyObject(response.resp_01))) {
 			// appendは後ろに追加、prependは前に追加
-			$('.result_01').append('<p>日付：' + response.resp_01.md_r_day + '</p>');
-			$('.result_01').append('<p>時間：' + response.resp_01.md_r_time + '</p>');
-			$('.result_01').append('<p>施設名：' + response.resp_01.md_r_shisetsu + '</p>');
-			$('.result_01').append('<p>室場名：' + response.resp_01.md_r_shitsujou + '</p>');
-			$('.result_01').append('<p>コート番号：' + response.resp_01.md_r_corder + '</p>');
+			$('#ida_table_day').append(response.resp_01.md_r_day);
+			$('#ida_table_time').append(response.resp_01.md_r_time);
+			$('#ida_table_shisetsu').append(response.resp_01.md_r_shisetsu);
+			$('#ida_table_shitsujou').append(response.resp_01.md_r_shitsujou);
+			$('#ida_table_corder').append(response.resp_01.md_r_corder);
 		}
 		// response.resp_02が空でなければ
 		if (!(jQuery.isEmptyObject(response.resp_02))) {
 			// appendは後ろに追加、prependは前に追加
-			$('.result_02').append('<p>日付：' + response.resp_02.md_r_day + '</p>');
-			$('.result_02').append('<p>時間：' + response.resp_02.md_r_time + '</p>');
-			$('.result_02').append('<p>施設名：' + response.resp_02.md_r_shisetsu + '</p>');
-			$('.result_02').append('<p>室場名：' + response.resp_02.md_r_shitsujou + '</p>');
-			$('.result_02').append('<p>コート番号：' + response.resp_02.md_r_corder + '</p>');
+			$('#idb_table_day').append(response.resp_02.md_r_day);
+			$('#idb_table_time').append(response.resp_02.md_r_time);
+			$('#idb_table_shisetsu').append(response.resp_02.md_r_shisetsu);
+			$('#idb_table_shitsujou').append(response.resp_02.md_r_shitsujou);
+			$('#idb_table_corder').append(response.resp_02.md_r_corder);
 		}
 		// response.resp_db_actionでtoast分岐
 		if (response.resp_db_action=='save') {
