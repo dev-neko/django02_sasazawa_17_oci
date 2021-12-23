@@ -56,17 +56,30 @@ $('#ajax_form').on('submit', function(e) { //---(1)
 	// views.pyから受け取ったJSONデータをページに表示
 	.done(function(response){
 		// 内容を初期化
-		$('.result').empty();
-		// responseが空でなければ
-		if (!(jQuery.isEmptyObject(response))) {
+		$('.result_01').empty();
+		$('.result_02').empty();
+		// response.resp_01が空でなければ
+		if (!(jQuery.isEmptyObject(response.resp_01))) {
+			// appendは後ろに追加、prependは前に追加
+			$('.result_01').append('<p>日付：' + response.resp_01.md_r_day + '</p>');
+			$('.result_01').append('<p>時間：' + response.resp_01.md_r_time + '</p>');
+			$('.result_01').append('<p>施設名：' + response.resp_01.md_r_shisetsu + '</p>');
+			$('.result_01').append('<p>室場名：' + response.resp_01.md_r_shitsujou + '</p>');
+			$('.result_01').append('<p>コート番号：' + response.resp_01.md_r_corder + '</p>');
+		}
+		// response.resp_02が空でなければ
+		if (!(jQuery.isEmptyObject(response.resp_02))) {
+			// appendは後ろに追加、prependは前に追加
+			$('.result_02').append('<p>日付：' + response.resp_02.md_r_day + '</p>');
+			$('.result_02').append('<p>時間：' + response.resp_02.md_r_time + '</p>');
+			$('.result_02').append('<p>施設名：' + response.resp_02.md_r_shisetsu + '</p>');
+			$('.result_02').append('<p>室場名：' + response.resp_02.md_r_shitsujou + '</p>');
+			$('.result_02').append('<p>コート番号：' + response.resp_02.md_r_corder + '</p>');
+		}
+		// response.resp_db_actionでtoast分岐
+		if (response.resp_db_action=='save') {
 			// 登録時のtoast表示
 			$("#toast_save").toast({delay:3000}).toast('show');
-			// append だと後ろに追加、prependは前に追加
-			$('.result').append('<p>日付：' + response.md_r_day + '</p>');
-			$('.result').append('<p>時間：' + response.md_r_time + '</p>');
-			$('.result').append('<p>施設名：' + response.md_r_shisetsu + '</p>');
-			$('.result').append('<p>室場名：' + response.md_r_shitsujou + '</p>');
-			$('.result').append('<p>コート番号：' + response.md_r_corder + '</p>');
 		} else {
 			// 削除時のtoast表示
 			$("#toast_delete").toast({delay:3000}).toast('show');
@@ -81,12 +94,20 @@ $('#ajax_form').on('submit', function(e) { //---(1)
 // form内のinput hiddenの内容をボタンごとに書き換えてsubmitすることでボタンによって処理を分ける
 // https://technote925.com/106
 $(function(){
-	$('#save_btn').click(function() {
-		$('#db_action').attr('value', 'save');
+	$('#save_btn_01').click(function() {
+		$('#db_action').attr('value', 'save_01');
 		$('#ajax_form').submit();
 	});
-	$('#delete_btn').click(function() {
-		$('#db_action').attr('value', 'delete');
+	$('#delete_btn_01').click(function() {
+		$('#db_action').attr('value', 'delete_01');
+		$('#ajax_form').submit();
+	});
+	$('#save_btn_02').click(function() {
+		$('#db_action').attr('value', 'save_02');
+		$('#ajax_form').submit();
+	});
+	$('#delete_btn_02').click(function() {
+		$('#db_action').attr('value', 'delete_02');
 		$('#ajax_form').submit();
 	});
 });

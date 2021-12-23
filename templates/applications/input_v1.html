@@ -51,9 +51,13 @@
 				<span class="d-flex align-items-center">
 					<div>
 						<!-- 登録ボタン -->
-						<button onFocus="this.blur()" type="button" class="btn btn-primary" id="save_btn">登録</button>
+						<button onFocus="this.blur()" type="button" class="btn btn-primary" id="save_btn_01">登録 01</button>
 						<!-- 削除ボタン -->
-						<button onFocus="this.blur()" type="button" class="btn btn-danger" id="delete_btn">削除</button>
+						<button onFocus="this.blur()" type="button" class="btn btn-danger" id="delete_btn_01">削除 01</button>
+						<!-- 登録ボタン -->
+						<button onFocus="this.blur()" type="button" class="btn btn-primary" id="save_btn_02">登録 02</button>
+						<!-- 削除ボタン -->
+						<button onFocus="this.blur()" type="button" class="btn btn-danger" id="delete_btn_02">削除 02</button>
 						<!-- ajax用 -->
 						<input type="hidden" id="db_action">
 					</div>
@@ -61,42 +65,88 @@
 				</span>
 			</form>
 			<!-- 予約内容の表示 -->
-			<p>現在の予約内容</p>
-			<div class="result">
-				{% if json_resp %}
-					<p>日付：{{ json_resp.md_r_day }}</p>
-					<p>時間：{{ json_resp.md_r_time }}</p>
-					<p>施設名：{{ json_resp.md_r_shisetsu }}</p>
-					<p>室場名：{{ json_resp.md_r_shitsujou }}</p>
-					<p>コート番号：{{ json_resp.md_r_corder }}</p>
+			<div class="result_01">
+				{% if json_resp.resp_01 %}
+					<div class="border border-secondary">
+						<p>日付：{{ json_resp.resp_01.md_r_day }}</p>
+						<p>時間：{{ json_resp.resp_01.md_r_time }}</p>
+						<p>施設名：{{ json_resp.resp_01.md_r_shisetsu }}</p>
+						<p>室場名：{{ json_resp.resp_01.md_r_shitsujou }}</p>
+						<p>コート番号：{{ json_resp.resp_01.md_r_corder }}</p>
+					</div>
+				{% endif %}
+				</div>
+			<div class="result_02">
+				{% if json_resp.resp_02 %}
+					<p>日付：{{ json_resp.resp_02.md_r_day }}</p>
+					<p>時間：{{ json_resp.resp_02.md_r_time }}</p>
+					<p>施設名：{{ json_resp.resp_02.md_r_shisetsu }}</p>
+					<p>室場名：{{ json_resp.resp_02.md_r_shitsujou }}</p>
+					<p>コート番号：{{ json_resp.resp_02.md_r_corder }}</p>
 				{% endif %}
 			</div>
-			<!-- Toast -->
-			<!-- https://qiita.com/hibara/items/3cbe9f1206183081cf7e -->
-			<div style="position: absolute; bottom: 10; right: 10;">
-				<div class="toast" id="toast_save">
-					<div class="toast-header">
-						<strong class="mr-auto">予約内容更新通知</strong>
-						<small></small>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="toast-body">
-						<p>予約内容を登録しました。</p>
-					</div>
+
+
+
+			<table class="table">
+				<tr>
+					<th>現在の予約内容</th><th>ID A</th><th>ID B</th>
+				</tr>
+				<tr>
+					<th>日付</th>
+					<td>{{ json_resp.resp_01.md_r_day }}</td>
+					<td>{{ json_resp.resp_02.md_r_day }}</td>
+				</tr>
+				<tr>
+					<th>時間</th>
+					<td>{{ json_resp.resp_01.md_r_time }}</td>
+					<td>{{ json_resp.resp_02.md_r_time }}</td>
+				</tr>
+				<tr>
+					<th>施設名</th>
+					<td>{{ json_resp.resp_01.md_r_shisetsu }}</td>
+					<td>{{ json_resp.resp_02.md_r_shisetsu }}</td>
+				</tr>
+				<tr>
+					<th>室場名</th>
+					<td>{{ json_resp.resp_01.md_r_shitsujou }}</td>
+					<td>{{ json_resp.resp_02.md_r_shitsujou }}</td>
+				</tr>
+				<tr>
+					<th>コート番号</th>
+					<td>{{ json_resp.resp_01.md_r_corder }}</td>
+					<td>{{ json_resp.resp_02.md_r_corder }}</td>
+				</tr>
+			</table>
+
+
+
+		</div>
+		<!-- Toast -->
+		<!-- https://qiita.com/hibara/items/3cbe9f1206183081cf7e -->
+		<div style="position: absolute; bottom: 10; right: 10;">
+			<div class="toast" id="toast_save">
+				<div class="toast-header">
+					<strong class="mr-auto">予約内容更新通知</strong>
+					<small></small>
+					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+						<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
-				<div class="toast" id="toast_delete">
-					<div class="toast-header">
-						<strong class="mr-auto">予約内容更新通知</strong>
-						<small></small>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="toast-body">
-						<p>予約内容を削除しました。</p>
-					</div>
+				<div class="toast-body">
+					<p>予約内容を登録しました。</p>
+				</div>
+			</div>
+			<div class="toast" id="toast_delete">
+				<div class="toast-header">
+					<strong class="mr-auto">予約内容更新通知</strong>
+					<small></small>
+					<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="toast-body">
+					<p>予約内容を削除しました。</p>
 				</div>
 			</div>
 		</div>
