@@ -5,6 +5,7 @@ from .models import BorderDataModel
 
 def input_v1(request):
 	TIME_DATA=['6:00～7:00',
+						 '6:00～8:00',
 						 '7:00～9:00',
 						 '9:00～11:00',
 						 '11:00～13:00',
