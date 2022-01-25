@@ -139,7 +139,7 @@ def selenium_driver(CDM_INST):
 	# アダプタエラー、自動テスト…、を非表示
 	chrome_options.add_experimental_option('detach',True)
 	chrome_options.add_experimental_option("excludeSwitches",['enable-automation','enable-logging'])
-	# chrome_options.add_argument('--headless')  #ヘッドレスモード
+	chrome_options.add_argument('--headless')  #ヘッドレスモード
 	chrome_options.add_argument('--incognito')  #シークレットモード
 	chrome_options.add_argument('--disable-gpu')
 	chrome_options.add_argument('--disable-desktop-notifications')
@@ -155,7 +155,11 @@ def selenium_driver(CDM_INST):
 	# chrome_options.add_argument('--disable-web-security')
 	# chrome_options.add_argument('--lang=ja')
 	# chrome_options.add_argument('--blink-settings=imagesEnabled=false') #画像非表示
-	return webdriver.Chrome(CDM_INST,options=chrome_options)
+	# Herokuではビルドパックが無いと動作しないし、CDM_INSTを指定していても動作しないので、tryで分岐して両対応
+	try:
+		return webdriver.Chrome(CDM_INST,options=chrome_options)
+	except:
+		return webdriver.Chrome(options=chrome_options)
 
 # ------------------------------
 # HerokuDB操作
