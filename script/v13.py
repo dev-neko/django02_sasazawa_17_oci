@@ -60,8 +60,8 @@ DEBUG=True
 # DEBUG=False
 
 # 実際に予約を行うかの分岐 Trueで行う
-# REAL_RESERVE=True
-REAL_RESERVE=False
+REAL_RESERVE=True
+# REAL_RESERVE=False
 
 AC_ID_1='00836979'
 AC_PW_1='12563986'
@@ -76,6 +76,7 @@ CDM_INST=ChromeDriverManager().install()
 
 # この時間までスリープ
 STR_TIME=datetime.strptime('12:00:00','%H:%M:%S').time()
+PRE_TIME=datetime.strptime('11:50:00','%H:%M:%S').time()
 # STR_TIME=datetime.strptime('15:21:00','%H:%M:%S').time()
 
 # ------------------------------
@@ -352,6 +353,7 @@ def main03():
 	# 定数の表示
 	logger.debug(f'DEBUG:{DEBUG}')
 	logger.debug(f'REAL_RESERVE:{REAL_RESERVE}')
+	logger.debug(f'PRE_TIME:{PRE_TIME}')
 	logger.debug(f'STR_TIME:{STR_TIME}')
 	# HerokuのDBから予約内容を取得
 	pg=postgres()
@@ -381,4 +383,10 @@ def main03():
 		logger.info(f'IDBの予約枠の手続きを行います。')
 		th2=threading.Thread(target=test03,args=(1,AC_ID_2,AC_PW_2,CDM_INST,border_data_02,'IDB'))
 		th2.start()
+
+# Herokuスケジューラでは30分単位でしか指定できないため、指定の時間までスリープ
+logger.info(f'プログラムは開始されましたが、{PRE_TIME}までスリープします。')
+while STR_TIME>=datetime.now().time():
+	time.sleep(0.1)
+logger.info(f'{PRE_TIME}を過ぎたため、事前手続きを開始します。')
 main03()
