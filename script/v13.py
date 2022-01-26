@@ -76,7 +76,7 @@ CDM_INST=ChromeDriverManager().install()
 
 # この時間までスリープ
 STR_TIME=datetime.strptime('12:00:00','%H:%M:%S').time()
-PRE_TIME=datetime.strptime('11:50:00','%H:%M:%S').time()
+PRE_TIME=datetime.strptime('11:40:00','%H:%M:%S').time()
 # STR_TIME=datetime.strptime('15:21:00','%H:%M:%S').time()
 
 # ------------------------------
