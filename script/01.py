@@ -1,5 +1,15 @@
-aaa=[{"model": "applications.borderdatamodel",
-"pk": 1,
-"fields": {"md_name": "border data", "md_r_day": "2021-12-16", "md_r_time": "6:00～7:00", "md_r_shisetsu": "世田谷公園", "md_r_shitsujou": "庭球場"}}]
+import time
+import requests
+from bs4 import BeautifulSoup
 
-print(aaa[0]['fields'])
+item_cd='FPC-17A-002'
+item_color='181'
+
+src_url='https://www.jins.com/jp/item_itemproperty_zaiko_sub.html?item_cd='+item_cd
+bs4obj=BeautifulSoup(requests.get(src_url).text,'html.parser')
+
+th_name=[]
+for i in bs4obj.select_one('table').select('th'):
+	th_name.append(i.text)
+print(th_name)
+

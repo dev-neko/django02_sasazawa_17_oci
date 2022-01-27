@@ -386,7 +386,7 @@ def main03():
 
 # Herokuスケジューラでは30分単位でしか指定できないため、指定の時間までスリープ
 logger.info(f'プログラムは開始されましたが、{PRE_TIME}までスリープします。')
-while STR_TIME>=datetime.now().time():
+while PRE_TIME>=datetime.now().time():
 	time.sleep(0.1)
 logger.info(f'{PRE_TIME}を過ぎたため、事前手続きを開始します。')
 main03()
