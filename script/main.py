@@ -379,8 +379,9 @@ def main03():
 	if (not border_data_01) and (not border_data_02):
 		logger.warning(f'予約枠が登録されていないため終了します。')
 		return
-	logger.info(f'予約内容の取得が完了したため、登録されている予約内容を消去します。')
-	pg.truncate_table()
+	# Herokuでは3つのプロセスで予約手続きを行うため一旦削除
+	# logger.info(f'予約内容の取得が完了したため、登録されている予約内容を消去します。')
+	# pg.truncate_table()
 	if border_data_01:
 		logger.info(f'IDAの予約枠の手続きを行います。')
 		th1=threading.Thread(target=test03,args=(0,AC_ID_1,AC_PW_1,CDM_INST,border_data_01,'IDA'))
