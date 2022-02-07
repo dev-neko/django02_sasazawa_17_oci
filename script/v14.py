@@ -37,15 +37,12 @@ Herokuである程度まともに動くことが分かったので、DEBUGに関
 ヘッドレスなのでウィンドウの処理削除した
 要素が見つからない理由が分からなかったので、そのページの内容を表示させる処理を追加した
 ↓
-Herokuでも多重ログインができないことが分かったので、2つのIDでそれぞれ1インスタンスで手続きするように変更
-スレッド処理は削除
 
 """
 
 # ------------------------------
 # ライブラリ
 # ------------------------------
-import os
 from bs4 import BeautifulSoup
 import selenium
 from selenium import webdriver
@@ -382,6 +379,9 @@ def main03():
 	if (not border_data_01) and (not border_data_02):
 		logger.warning(f'予約枠が登録されていないため終了します。')
 		return
+	# Herokuでは3つのプロセスで予約手続きを行うため一旦削除
+	# logger.info(f'予約内容の取得が完了したため、登録されている予約内容を消去します。')
+	# pg.truncate_table()
 	if border_data_01:
 		logger.info(f'IDAの予約枠の手続きを行います。')
 		th1=threading.Thread(target=test03,args=(0,AC_ID_1,AC_PW_1,CDM_INST,border_data_01,'IDA'))
@@ -390,9 +390,6 @@ def main03():
 		logger.info(f'IDBの予約枠の手続きを行います。')
 		th2=threading.Thread(target=test03,args=(1,AC_ID_2,AC_PW_2,CDM_INST,border_data_02,'IDB'))
 		th2.start()
-
-SCRIPT_TYPE=os.environ.get('SCRIPT_TYPE')
-print(SCRIPT_TYPE)
 
 # Herokuスケジューラでは30分単位でしか指定できないため、指定の時間までスリープ
 logger.info(f'プログラムは開始されましたが、{PRE_TIME}までスリープします。')
