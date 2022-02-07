@@ -52,13 +52,11 @@ from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import TimeoutException
 from webdriver_manager.chrome import ChromeDriverManager
-import threading
 from datetime import datetime
 import heroku3
 import psycopg2
 from psycopg2.extras import DictCursor
 import time
-# import schedule
 
 # ------------------------------
 # 定数
@@ -84,7 +82,9 @@ CDM_INST=ChromeDriverManager().install()
 # この時間までスリープ
 STR_TIME=datetime.strptime('12:00:00','%H:%M:%S').time()
 PRE_TIME=datetime.strptime('11:40:00','%H:%M:%S').time()
-# STR_TIME=datetime.strptime('15:21:00','%H:%M:%S').time()
+
+# IDAとIDBで処理を分けるためにHerokuの環境変数を取得
+SCRIPT_TYPE=os.environ.get('SCRIPT_TYPE')
 
 # ------------------------------
 # logger
@@ -193,7 +193,7 @@ class postgres:
 # ------------------------------
 # main def
 # ------------------------------
-def test03(wincont,ac_id,ac_pass,CDM_INST,border_data,USEID):
+def test03(ac_id,ac_pass,CDM_INST,border_data,USEID):
 	try:
 		# 定数をまとめる
 		R_DAY=datetime.strptime(border_data['md_r_day'],'%Y-%m-%d')
@@ -209,8 +209,6 @@ def test03(wincont,ac_id,ac_pass,CDM_INST,border_data,USEID):
 		driver=selenium_driver(CDM_INST)
 		# ページの読み込みで待機する秒数、これ以上経過すると例外発生
 		driver.set_page_load_timeout(60)
-		# driver.set_window_size(512,707)
-		# driver.set_window_position(512*wincont,0)
 		url='https://setagaya.keyakinet.net/mobile/'
 		driver.get(url)
 		logger.debug(f'{USEID}:{url} にアクセス')
@@ -365,6 +363,7 @@ def main03():
 	logger.debug(f'REAL_RESERVE:{REAL_RESERVE}')
 	logger.debug(f'PRE_TIME:{PRE_TIME}')
 	logger.debug(f'STR_TIME:{STR_TIME}')
+	logger.debug(f'SCRIPT_TYPE:{SCRIPT_TYPE}')
 	# HerokuのDBから予約内容を取得
 	pg=postgres()
 	pg.connection(HEROKU_API=HEROKU_API,HEROKU_APP_NAME=HEROKU_APP_NAME)
@@ -379,24 +378,19 @@ def main03():
 	logger.debug(f'border_data_01:{border_data_01}')
 	logger.debug(f'border_data_02:{border_data_02}')
 	# IDごとに予約手続き開始
-	if (not border_data_01) and (not border_data_02):
+	if border_data_01 and (SCRIPT_TYPE=='IDA'):
+		logger.info(f'IDAの予約枠の手続きを行います。')
+		test03(AC_ID_1,AC_PW_1,CDM_INST,border_data_01,'IDA')
+	elif border_data_02 and (SCRIPT_TYPE=='IDB'):
+		logger.info(f'IDBの予約枠の手続きを行います。')
+		test03(AC_ID_2,AC_PW_2,CDM_INST,border_data_02,'IDB')
+	else:
 		logger.warning(f'予約枠が登録されていないため終了します。')
 		return
-	if border_data_01:
-		logger.info(f'IDAの予約枠の手続きを行います。')
-		th1=threading.Thread(target=test03,args=(0,AC_ID_1,AC_PW_1,CDM_INST,border_data_01,'IDA'))
-		th1.start()
-	if border_data_02:
-		logger.info(f'IDBの予約枠の手続きを行います。')
-		th2=threading.Thread(target=test03,args=(1,AC_ID_2,AC_PW_2,CDM_INST,border_data_02,'IDB'))
-		th2.start()
-
-SCRIPT_TYPE=os.environ.get('SCRIPT_TYPE')
-print(SCRIPT_TYPE)
 
 # Herokuスケジューラでは30分単位でしか指定できないため、指定の時間までスリープ
 logger.info(f'プログラムは開始されましたが、{PRE_TIME}までスリープします。')
 while PRE_TIME>=datetime.now().time():
-	time.sleep(0.1)
+	time.sleep(1)
 logger.info(f'{PRE_TIME}を過ぎたため、事前手続きを開始します。')
 main03()
