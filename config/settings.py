@@ -98,3 +98,8 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+# Authentication
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/v1/'
+LOGOUT_REDIRECT_URL = '/accounts/login/'

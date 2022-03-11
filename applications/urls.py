@@ -6,4 +6,5 @@ app_name='app_urls'
 urlpatterns = [
 	path('v1/',views.input_v1,name='input'),
 	path('ajax_proc/',views.ajax_proc,name='ajax_proc'),  #-(3)
+	path('userdata/',views.userdata,name='userdata'),
 ]
