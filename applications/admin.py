@@ -1,4 +1,4 @@
 from django.contrib import admin
-from .models import BorderDataModel
+from .models import DBModel
 
-admin.site.register(BorderDataModel)
+admin.site.register(DBModel)

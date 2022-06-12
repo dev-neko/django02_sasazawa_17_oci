@@ -11,30 +11,39 @@
 	</head>
 
 	<body>
-		<form class="form-signin" method="post">
-			{% csrf_token%}
-			<div class="text-center mb-4">
-				<h1 class="h3 mb-3 font-weight-normal">Please Log In</h1>
-			</div>
-			{% if form.errors %}
-			<div class="alert alert-danger" role="alert">正しいIDとパスワードを入力してください。</div>
-			{% endif %}
+		<!-- 囲みとその大きさを指定するために追加 -->
+		<div class="container">
+			<div class="card mx-auto w-50">
 
-			<div class="form-label-group">
-				<input type="text" name="username" id="id_username" class="form-control" placeholder="ID" required autofocus>
-				<label for="id_username">ID</label>
-			</div>
+			<form class="form-signin" method="post">
+				{% csrf_token%}
+				<div class="text-center mb-4 border-bottom">
+					<h1 class="h3 mb-3 font-weight-normal">Please Log In</h1>
+				</div>
+				{% if form.errors %}
+				<div class="alert alert-danger" role="alert">正しいIDとパスワードを入力してください。</div>
+				{% endif %}
 
-			<div class="form-label-group">
-				<input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
-				<label for="id_password">Password</label>
-			</div>
+				<div class="form-label-group">
+					<input type="text" name="username" id="id_username" class="form-control" placeholder="ID" required autofocus>
+					<label for="id_username">ID</label>
+				</div>
 
-			<div class="checkbox mb-3">
-				<label>
-				</label>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+				<div class="form-label-group">
+					<input type="password" name="password" id="id_password" class="form-control" placeholder="Password" required>
+					<label for="id_password">Password</label>
+				</div>
+
+				<div class="checkbox mb-3">
+					<label>
+					</label>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+				</div>
+
+			</form>
+
 			</div>
-		</form>
+		</div>
+
 	</body>
 </html>

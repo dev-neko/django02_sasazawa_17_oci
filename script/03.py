@@ -1,17 +1,39 @@
-import datetime
-import math
-import re
+import requests
+import json
+import csv
 
-resp='@badge-info=subscriber/4;badges=subscriber/3,moments/2;color=#8A2BE2;display-name=michako_gogo;emotes=;first-msg=0;flags=;id=ece40d85-254c-4f08-aa63-531c25963229;mod=0;room-id=216351084;subscriber=1;tmi-sent-ts=1654069719611;turbo=0;user-id=723424874;user-type= :michako_gogo!michako_gogo@michako_gogo.tmi.twitch.tv PRIVMSG #dasoku_aniki :メル「騙されたなぁ」'
+# 本来はもうAPIを使用してアーカイブのコメントは取得できないが、Twitch自身のclient_idを使用することで現在でも取得可能だがグレーな方法
+# https://ja.stackoverflow.com/questions/83617/twitch-api-を用いてアーカイブ動画のコメントを取得したい
+client_id = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
+video_id = '1246355359'
 
-d={ i.split('=')[0]:i.split('=')[1] for i in resp.split(';') }
-# タイムスタンプを取得
-ts = int(d['tmi-sent-ts'])
-print(ts)
-# チャットを取得
-chat_resp = d['user-type']
-chat = chat_resp[chat_resp.rfind(':')+1:]
-print(chat)
+# 一回目のリクエスト
+url = 'https://api.twitch.tv/v5/videos/' + video_id + '/comments?content_offset_seconds=0'
+headers = {'client-id': client_id}
+r = requests.get(url, headers=headers)
+print(r)
+row_data = r.json()
+print(row_data)
 
-dt = datetime.datetime.fromtimestamp(math.floor(ts/1000))
-print(dt)
+with open('comments.csv', 'a',encoding='utf-8', errors='ignore') as f:
+	writer = csv.writer(f)
+	for comment in row_data['comments']:
+		writer.writerow([
+			comment['content_offset_seconds'],
+			comment['message']['body']
+		])
+
+# 二回目以降のリクエスト
+while '_next' in row_data:
+	url = 'https://api.twitch.tv/v5/videos/' + video_id + '/comments?cursor=' + row_data['_next']
+	headers = {'client-id': client_id}
+	r = requests.get(url, headers=headers)
+	row_data = r.json()
+
+	with open('comments.csv', 'a',encoding='utf-8', errors='ignore') as f:
+		writer = csv.writer(f)
+		for comment in row_data['comments']:
+			writer.writerow([
+				comment['content_offset_seconds'],
+				comment['message']['body']
+			])

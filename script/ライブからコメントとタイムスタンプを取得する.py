@@ -10,8 +10,16 @@ https://qiita.com/kanekom/items/42ed3cd079fa5409ae58
 ツイッチのAPIの動作確認をした
 2022年6月2日
 ライブからコメントとタイムスタンプを取得できるようになった
-コメントの流れが速いと1個か2個くらい抜けてしまう
+コメントの流れが速いと1個か2個くらい抜けてしまうが、概ね取得できることを確認した
 
+nickname
+karupasu1919
+access_token
+2uk2854x3r90a26l5aibi9csd8gzq2
+client_id
+gq5u9v47cfdorumns4qo8rfqyix2kv
+token
+oauth:pestt6kbf2w5i8nhuvibaudo3ha3ee
 """
 
 import datetime
@@ -48,7 +56,7 @@ def main():
 				sock.send("PONG\n".encode('utf-8'))
 			# 接続時の不要な文字列をpass
 			elif (len(resp)>0) and ('PRIVMSG' in resp):
-				# respを;区切りでリストに変換、そのリストを=区切りで辞書に変換
+				# respを;区切りでリストに変換、そのリストの要素ごとに=区切りで辞書に変換
 				d={ i.split('=')[0]:i.split('=')[1] for i in resp.split(';')}
 				# タイムスタンプを取得
 				# 返されるのはミリ秒が含まれているので千で割って小数点以下切り捨て
@@ -58,7 +66,9 @@ def main():
 				chat_resp=d['user-type']
 				chat=chat_resp[chat_resp.rfind(':')+1:]
 				print(ts,chat)
+			# 接続時の文字列を表示させたい場合
 			else:
+				pass
 				print(resp)
 	except KeyboardInterrupt:
 			sock.close()
