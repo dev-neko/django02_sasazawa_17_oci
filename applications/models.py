@@ -4,6 +4,7 @@ class DBModel(models.Model):
 	objects=models.Manager()
 	md_name=models.CharField(max_length=50,null=True)
 	md_ts_chat=models.TextField(null=True)
+	md_dl_state=models.CharField(max_length=50,null=True)
 	# md_video_length=models.CharField(max_length=50,null=True)
 	# md_video_recorded_at_jst=models.CharField(max_length=50,null=True)
 	def __str__(self):

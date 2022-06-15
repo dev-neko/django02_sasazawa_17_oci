@@ -12,6 +12,9 @@ ALLOWED_HOSTS=['*']
 
 SECRET_KEY=os.environ.get('SECRET_KEY')
 
+# ajaxへpostする際のサイズ上限を指定
+DATA_UPLOAD_MAX_MEMORY_SIZE = None
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
