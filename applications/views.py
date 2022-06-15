@@ -365,6 +365,8 @@ def ajax_proc_aaa(request):
 			)
 
 		# print(json_resp)
+		print(json_resp['videoids'])
+		print(json_resp['progress'])
 
 	return JsonResponse(json_resp)
 
