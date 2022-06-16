@@ -373,6 +373,7 @@ def ajax_proc_aaa(request):
 def ajax_proc_dd(request):
 	if request.method=='POST':
 		# print(request.POST)
+		# print(request.body)
 
 		# saveかつvideoidが空でない
 		if (request.POST.get('db_action')=='save') and (request.POST.getlist('videoids')):
@@ -421,6 +422,13 @@ def ajax_proc_dd(request):
 			print(json_resp)
 
 			return JsonResponse(json_resp)
+
+		# previewページを表示させる
+		elif request.POST.get('db_action')=='preview' and request.POST.getlist('videoids'):
+			# videoidごとのts_chat_distを辞書型リストで返す
+			videoid_ts_chat_dist=[{'videoid':videoid,'ts_chat_dist':eval(DBModel.objects.get(md_name=videoid).md_ts_chat)} for videoid in request.POST.getlist('videoids')]
+			# print(videoid_ts_chat_dist)
+			return render(request,'applications/preview_v1.html',{'videoid_ts_chat_dist':videoid_ts_chat_dist})
 
 		# 何もしないので204を返す
 		else:

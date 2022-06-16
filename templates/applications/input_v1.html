@@ -55,7 +55,7 @@
 				{% for item in finish_list %}
 					<div id="{{ item }}_div">
 						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="{{ item }}" value="{{ item }}" name="videoids">
+							<input type="checkbox" checked class="custom-control-input" id="{{ item }}" value="{{ item }}" name="videoids">
 							<label class="custom-control-label" for="{{ item }}">{{ item }}</label>
 						</div>
 					</div>
@@ -65,13 +65,21 @@
 				<!-- 保存・削除ボタン -->
 				<div class="d-flex align-items-center">
 					<div>
-						<!-- DLボタン -->
+						<!-- 保存ボタン -->
 						<div class="btn-group">
 							<button onFocus="this.blur()" type="submit" class="btn btn-success" name="db_action" id="db_action_save" value='save'>保存</button>
 						</div>
 						<!-- 削除ボタン -->
 						<div class="btn-group">
 							<button onFocus="this.blur()" type="submit" class="btn btn-danger" name="db_action" id="db_action_delete" value='delete'>削除</button>
+						</div>
+						<!-- プレビューボタン -->
+						<div class="btn-group">
+							<!--
+							別のタブで開くために formtarget="_blank" を付与
+							https://feeld-uni.com/entry/2021/01/24/152038
+							-->
+							<button onFocus="this.blur()" type="submit" class="btn btn-warning" name="db_action" id="db_action_preview" value='preview' formtarget="_blank">プレビュー</button>
 						</div>
 					</div>
 				</div>
