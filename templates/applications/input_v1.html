@@ -45,7 +45,7 @@
 			<!-- トークン -->
 			<input type="hidden" id="next_token" class="form-control" value="">
 
-			{% include "base/popover_headline_v1.html" with title="<h5>csvファイルの保存・削除</h5>" description="チェックボックスを入れたvideoidのcsvファイルを保存・削除します。<br>複数同時に保存・削除が可能です。<br>取得中にも操作可能です。" only %}
+			{% include "base/popover_headline_v1.html" with title="<h5>csvファイルの保存・削除・プレビュー</h5>" description="チェックボックスを入れたvideoidのcsvファイルを保存・削除・プレビューします。<br>複数同時に操作可能です。<br>取得中にも操作可能です。" only %}
 			<form id="ajax_dd_form" action="{% url 'app_urls:ajax_proc_dd' %}" method="POST">
 				{% csrf_token %}
 
@@ -55,7 +55,7 @@
 				{% for item in finish_list %}
 					<div id="{{ item }}_div">
 						<div class="custom-control custom-checkbox">
-							<input type="checkbox" checked class="custom-control-input" id="{{ item }}" value="{{ item }}" name="videoids">
+							<input type="checkbox" class="custom-control-input" id="{{ item }}" value="{{ item }}" name="videoids">
 							<label class="custom-control-label" for="{{ item }}">{{ item }}</label>
 						</div>
 					</div>
