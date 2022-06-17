@@ -26,16 +26,30 @@
 				{% for item in videoid_ts_chat_dist %}
 					{% if forloop.first %}
 						<div class="tab-pane fade show active" id="id_{{item.videoid}}" role="tabpanel" aria-labelledby="id_{{item.videoid}}-tab">
-							ts,chat<br>
+							timestamp(JST),chat<br>
 							{% for aaa in item.ts_chat_dist %}
-							<a href="https://www.twitch.tv/videos/{{item.videoid}}?t={{ aaa.ts }}s" target="_blank">{{ aaa.ts }}</a>,{{ aaa.chat }}<br>
+								{% for key,value in aaa.items %}
+									{% if forloop.first %}
+										{{ value }},
+									{% else %}
+										{{ value }}
+									{% endif %}
+								{% endfor %}
+								<br>
 							{% endfor %}
 						</div>
 					{% else %}
 						<div class="tab-pane fade" id="id_{{item.videoid}}" role="tabpanel" aria-labelledby="id_{{item.videoid}}-tab">
-							ts,chat<br>
+							timestamp(JST),chat<br>
 							{% for aaa in item.ts_chat_dist %}
-							<a href="https://www.twitch.tv/videos/{{item.videoid}}?t={{ aaa.ts }}s" target="_blank">{{ aaa.ts }}</a>,{{ aaa.chat }}<br>
+								{% for key,value in aaa.items %}
+									{% if forloop.first %}
+										{{ value }},
+									{% else %}
+										{{ value }}
+									{% endif %}
+								{% endfor %}
+								<br>
 							{% endfor %}
 						</div>
 					{% endif %}

@@ -186,7 +186,7 @@ def ajax_proc_after(request):
 
 
 # DBから逐一辞書を取得する
-def ajax_proc_aaa_old(request):
+def ajax_proc_aaa_old_1(request):
 	if request.method=='POST':
 		# print(request.POST)
 		post_data={
@@ -279,7 +279,7 @@ def ajax_proc_aaa_old(request):
 	return JsonResponse(json_resp)
 
 # DBから逐一辞書を取得せずpostで送受信する
-def ajax_proc_aaa(request):
+def ajax_proc_aaa_old_2(request):
 	if request.method=='POST':
 		# print(request.POST)
 		post_data={
@@ -370,6 +370,97 @@ def ajax_proc_aaa(request):
 
 	return JsonResponse(json_resp)
 
+# DBから逐一辞書を取得せずpostで送受信する
+# タイムスタンプを秒だけにした
+def ajax_proc_aaa(request):
+	if request.method=='POST':
+		# print(request.POST)
+		post_data={
+			'req_videoids':request.POST.get('videoids'),
+			'req_next_token':request.POST.get('next_token'),
+			'req_video_length':request.POST.get('video_length'),
+			'req_ts_chat_dist':request.POST.get('ts_chat_dist'),
+		}
+		# print(post_data)
+
+		client_id = 'kimne78kx3ncx6brgo4mv6wki5h1ko'
+		headers = {'client-id': client_id}
+
+		# 1回目はトークンがないので、それを利用してURLを分岐
+		if post_data['req_next_token']==None:
+			ts_chat_url = 'https://api.twitch.tv/v5/videos/' + post_data['req_videoids'] + '/comments?content_offset_seconds=0'
+			# 同じvideoidで再取得するとdistが増え続けるので1回目にDBからvideoidを指定して全て削除
+			try:
+				DBModel.objects.get(md_name=post_data['req_videoids']).delete()
+			except:
+				pass
+			# 1回目にAPIから動画の長さ(秒)と配信開始日時を取得
+			video_data_url = 'https://api.twitch.tv/v5/videos/' + post_data['req_videoids']
+			r = requests.get(video_data_url, headers=headers)
+			video_data = r.json()
+			# print(json.dumps(video_data, indent=2))
+			# 動画の長さ(秒)
+			video_length = video_data['length']
+			# 日時オブジェクトに変換してJSTにするために+9時間
+			# video_recorded_at_jst=dt.strptime(video_data["recorded_at"],'%Y-%m-%dT%H:%M:%SZ')+datetime.timedelta(hours=9)
+			# 1回目は空のリストを指定
+			ts_chat_dist_old=[]
+		else:
+			ts_chat_url = 'https://api.twitch.tv/v5/videos/' + post_data['req_videoids'] + '/comments?cursor=' + post_data['req_next_token']
+			# 2回目以降はrequestsから取得
+			video_length=post_data['req_video_length']
+			# video_recorded_at_jst=dt.strptime(post_data['req_video_recorded_at_jst'],'%Y-%m-%d %H:%M:%S')
+			# strだけど中身は辞書型のリストなのでevalで変換
+			ts_chat_dist_old=eval(post_data['req_ts_chat_dist'])
+
+		# tsとchatを取得
+		r = requests.get(ts_chat_url, headers=headers)
+		ts_chat_data = r.json()
+		# print(ts_chat_data)
+		# print(json.dumps(ts_chat_data, indent=2))
+		# tsとchatを辞書型リストに格納
+		# tsは小数点以下も含まれるので切り捨て
+		ts_chat_dist=ts_chat_dist_old+[{'ts':math.floor(int(comment['content_offset_seconds'])),'chat':comment['message']['body']} for comment in ts_chat_data['comments']]
+		# print(ts_chat_dist)
+
+		# 進捗を計算
+		# リストの最後のtsを取得
+		last_ts=ts_chat_dist[-1]['ts']
+		# print(last_ts,video_length)
+		# 動画全体の時間から割合を取得して小数点以下切り捨て
+		progress=math.floor(int(last_ts)/int(video_length)*100)
+		# print(f'進捗：{progress}%')
+
+		# ajaxに返すレスポンス
+		json_resp={'videoids':post_data['req_videoids'],
+		           'progress':progress,
+		           'video_length':video_length,
+		           # 辞書型のリストで送信すると勝手に他の型に変換されて使えなくなるので、strでそのままの型で送信してevalした
+		           'ts_chat_dist':str(ts_chat_dist),
+		           }
+
+		# next_tokenの有無でif
+		if '_next' in ts_chat_data:
+			json_resp['next_token']=ts_chat_data['_next']
+		else:
+			json_resp['next_token']='None'
+			# すべて取得が完了したらDBに保存
+			DBModel.objects.update_or_create(
+				# ユニークな値
+				md_name=post_data['req_videoids'],
+				# 更新もしくは新規で追加したい値
+				defaults={
+					'md_ts_chat':ts_chat_dist,
+					'md_dl_state':'finish',
+				}
+			)
+
+		# print(json_resp)
+		print(json_resp['videoids'])
+		print(json_resp['progress'])
+
+	return JsonResponse(json_resp)
+
 def ajax_proc_dd(request):
 	if request.method=='POST':
 		# print(request.POST)
@@ -394,7 +485,7 @@ def ajax_proc_dd(request):
 				# csv作成、zipにまとめる
 				csv_file=HttpResponse(content_type='text/csv')
 				# csv_file=BytesIO() #TypeError: a bytes-like object is required, not 'str'
-				writer=csv.DictWriter(csv_file,['timestamp(JST)','chat'])
+				writer=csv.DictWriter(csv_file,['ts','chat'])
 				writer.writeheader()
 				writer.writerows(ts_chat_dist)
 				# print(csv_file.getvalue())

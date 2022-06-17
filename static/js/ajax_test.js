@@ -67,7 +67,7 @@ $('#ajax_form').on('submit', function(e) {
 		// トークン
 		$('#next_token').replaceWith('<input type="hidden" id="next_token" class="form-control" value="'+response.next_token+'">');
 		// 再帰呼び出し
-		after_ajax(response.videoids,response.next_token,response.video_length,response.video_recorded_at_jst,response.ts_chat_dist);
+		after_ajax(response.videoids,response.next_token,response.video_length,response.ts_chat_dist);
 	})
 	// 通信失敗時の処理
 	.fail(function(){
@@ -76,7 +76,7 @@ $('#ajax_form').on('submit', function(e) {
 });
 
 // ajaxを自分で呼び出して再帰的に実行する
-function after_ajax(videoids,next_token,video_length,video_recorded_at_jst,ts_chat_dist){
+function after_ajax(videoids,next_token,video_length,ts_chat_dist){
 	// フォーム送信の通信を止めるためにpreventDefault()を使用
 	// e.preventDefault();
 	// サーバに送信するリクエストの設定
@@ -91,7 +91,6 @@ function after_ajax(videoids,next_token,video_length,video_recorded_at_jst,ts_ch
 			'videoids':videoids,
 			'next_token':next_token,
 			'video_length':video_length,
-			'video_recorded_at_jst':video_recorded_at_jst,
 			'ts_chat_dist':ts_chat_dist,
 		},
 		// データ形式(ここではjson)を指定
@@ -107,7 +106,7 @@ function after_ajax(videoids,next_token,video_length,video_recorded_at_jst,ts_ch
 		$('#next_token').replaceWith('<input type="hidden" id="next_token" class="form-control" value="'+response.next_token+'">');
 		// next_tokenがNoneでなければ再帰呼び出し
 		if (response.next_token != 'None') {
-			after_ajax(response.videoids,response.next_token,response.video_length,response.video_recorded_at_jst,response.ts_chat_dist);
+			after_ajax(response.videoids,response.next_token,response.video_length,response.ts_chat_dist);
 		// next_tokenがNoneならプログレスバーを100%にして終了
 		} else {
 			// 更新が速すぎて99%とかが見れないので少しスリープ→機能しないようなので保留
