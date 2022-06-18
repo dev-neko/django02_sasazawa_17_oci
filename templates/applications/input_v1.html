@@ -52,11 +52,11 @@
 				<!-- チェックボックス群 -->
 				<!-- videoidごとにチェックボックスを表示 -->
 				<div class="form-group">
-				{% for item in finish_list %}
-					<div id="{{ item }}_div">
+				{% for item in finish_dist %}
+					<div id="{{ item.videoid }}_div">
 						<div class="custom-control custom-checkbox">
-							<input type="checkbox" class="custom-control-input" id="{{ item }}" value="{{ item }}" name="videoids">
-							<label class="custom-control-label" for="{{ item }}">{{ item }}</label>
+							<input type="checkbox" class="custom-control-input" id="{{ item.videoid }}" value="{{ item.videoid }}" name="videoids">
+							<label class="custom-control-label" for="{{ item.videoid }}">{{ item.videoid }} {{item.title}}</label>
 						</div>
 					</div>
 				{% endfor %}
