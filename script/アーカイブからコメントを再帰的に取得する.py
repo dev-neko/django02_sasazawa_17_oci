@@ -45,7 +45,7 @@ def main():
 		print(ts_chat_dist)
 
 		# 進捗を計算
-		last_ts_hhmmss=dt.strptime(ts_chat_dist[-1]['ts'],'%H:%M:%S')
+		last_ts_hhmmss=datetime.datetime.strptime(ts_chat_dist[-1]['ts'],'%H:%M:%S')
 		last_ts=last_ts_hhmmss.hour*60*60+last_ts_hhmmss.minute*60+last_ts_hhmmss.second
 		print(last_ts)
 		progress=math.floor(int(last_ts)/int(video_length)*100)

@@ -1,6 +1,5 @@
 import json
 import math
-
 import requests
 
 # 本来はもうAPIを使用してアーカイブのコメントは取得できないが、Twitch自身のclient_idを使用することで現在でも取得可能だがグレーな方法
@@ -23,11 +22,28 @@ video_length=video_data['length']
 # UTCなのでJSTにするために+9時間する
 # recorded_at:2022-06-12T12:58:26Z
 
-from datetime import datetime as dt
+# from datetime import datetime as dt
+# import datetime
+#
+# video_recorded_at = video_data["recorded_at"]
+# print(video_recorded_at)
+#
+# tdatetime = dt.strptime(video_recorded_at, '%Y-%m-%dT%H:%M:%SZ')
+# print(tdatetime)
+#
+# dt2 = tdatetime + datetime.timedelta(hours=9)
+# print(str(dt2))
+#
+# dt2 = tdatetime + datetime.timedelta(seconds=30)
+# print(dt2)
+
+
 import datetime
 
 video_recorded_at = video_data["recorded_at"]
-tdatetime = dt.strptime(video_recorded_at, '%Y-%m-%dT%H:%M:%SZ')
+print(video_recorded_at)
+
+tdatetime = datetime.datetime.strptime(video_recorded_at, '%Y-%m-%dT%H:%M:%SZ')
 print(tdatetime)
 
 dt2 = tdatetime + datetime.timedelta(hours=9)
@@ -36,4 +52,4 @@ print(str(dt2))
 dt2 = tdatetime + datetime.timedelta(seconds=30)
 print(dt2)
 
-
+print(datetime.date.today())

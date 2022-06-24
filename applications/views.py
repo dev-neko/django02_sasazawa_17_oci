@@ -1,3 +1,6 @@
+# ------------------------------
+# ライブラリ
+# ------------------------------
 import csv
 import json
 import math
@@ -175,6 +178,7 @@ def input_v1(request):
 			DB_data=DBModel.objects.all()
 			# print(DB_data)
 			# finish_list=[ i.md_name for i in DB_data if i.md_dl_state=='finish']
+			# videoidに紐づいたタイトルを表示するために変更
 			finish_dist=[{'videoid':i.md_name,'title':i.md_video_title} for i in DB_data if i.md_dl_state=='finish']
 			# print(finish_list)
 		except:
@@ -182,7 +186,7 @@ def input_v1(request):
 		json_resp={'finish_dist':finish_dist}
 		# print(json_resp)
 		# ここでは辞書を返さないとエラーになる
-		return render(request, 'applications/input_v1.html', json_resp)
+		return render(request,'applications/input_v1.html',json_resp)
 	else:
 		return HttpResponseRedirect('/accounts/login/')
 
@@ -565,6 +569,7 @@ def ajax_proc_aaa(request):
 
 	return JsonResponse(json_resp)
 
+# 保存・削除・プレビュー
 def ajax_proc_dd(request):
 	if request.method=='POST':
 		# print(request.POST)

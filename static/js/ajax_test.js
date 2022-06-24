@@ -77,24 +77,24 @@ $('#ajax_form').on('submit', function(e) {
 
 // ajaxを自分で呼び出して再帰的に実行する
 function after_ajax(videoids,next_token,video_length,ts_chat_dist){
-	// フォーム送信の通信を止めるためにpreventDefault()を使用
+	// フォーム送信の通信を止めるためにpreventDefault()を使用→これを入れると止まる
 	// e.preventDefault();
 	// サーバに送信するリクエストの設定
 	$.ajax({
 		// リクエストを送信するURLを指定
 		// propメソッドを用いればformの内容を引き継げるのでjsを外部に設置可能
-		'url': $('#ajax_form').prop("action"),
+		'url':$('#ajax_form').prop("action"),
 		// HTTPメソッドのGET通信かPOST通信を指定
-		'method': $('#ajax_form').prop("method"),
-		// サーバに送信するデータの指定
-		'data': {
+		'method':$('#ajax_form').prop("method"),
+		// views.pyに送信するデータの指定
+		'data':{
 			'videoids':videoids,
 			'next_token':next_token,
 			'video_length':video_length,
 			'ts_chat_dist':ts_chat_dist,
 		},
 		// データ形式(ここではjson)を指定
-		'dataType': 'json'
+		'dataType':'json'
 	})
 	// 通信成功時の処理
 	// views.pyから受け取ったJSONデータをページに表示
