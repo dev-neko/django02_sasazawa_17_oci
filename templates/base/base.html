@@ -1,0 +1,30 @@
+{% load static %}
+<html lang="ja">
+	<head>
+		<!-- head ここから -->
+		{% include 'base/head.html' %}
+		<!-- head ここまで -->
+	</head>
+	<body>
+		<!-- navbar ここから -->
+		{% include "base/navbar.html" %}
+		<!-- navbar ここまで -->
+
+		<!-- content ここから -->
+		<!-- ナビバー以外に余白を入れるために指定 -->
+		<div class="between-content">
+			{% block content %}
+			{% endblock %}
+		</div>
+		<!-- content ここまで -->
+
+		<!-- 外部jsファイル ここから -->
+		<script type="text/javascript" src="{% static 'js/ajax_test.js' %}"></script>
+		<script type="text/javascript" src="{% static 'js/bootstrap_popper.js' %}"></script>
+		<!-- 外部jsファイル ここまで -->
+
+		<!-- Footer ここから -->
+		{% include "base/footer.html" %}
+		<!-- Footer ここまで -->
+	</body>
+</html>

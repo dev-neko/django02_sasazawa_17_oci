@@ -1,0 +1,22 @@
+.footer {
+	padding: 20px 0 20px 0;
+	background-color: #000000;
+}
+.footer .support-parts-desc{
+	color: #878c94;
+}
+.footer .title{
+	text-align: left;
+	color:#fff;
+	font-size:25px;
+}
+.footer .list-inline a{
+	display:block;
+	color:#fff;
+	font-size:18px;
+}
+.footer .border-hr{
+	border-top:solid 1px #fff;
+	margin-top:15px;
+	margin-bottom:10px;
+}

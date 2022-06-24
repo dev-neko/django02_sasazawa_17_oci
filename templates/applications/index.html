@@ -1,0 +1,13 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+	<body>
+		<h1>h1 タグ</h1>
+		<p>sample-1</p>
+		<h2>h2 タグ</h2>
+		<p>sample-2</p>
+		{% include "base/popover.html" with title="<h5>ポップオーバーサンプル</h5>" description="ポップオーバーサンプル<br>ポップオーバーサンプル<br>ポップオーバーサンプル" only %}
+	</body>
+</html>
+{% endblock %}
