@@ -3,11 +3,11 @@
 {% load static %}
 <html>
 	<body>
-		<h1>h1 タグ</h1>
-		<p>sample-1</p>
-		<h2>h2 タグ</h2>
-		<p>sample-2</p>
-		{% include "base/popover.html" with title="<h5>ポップオーバーサンプル</h5>" description="ポップオーバーサンプル<br>ポップオーバーサンプル<br>ポップオーバーサンプル" only %}
+
+		<h3>
+			<a href="{% url 'app_urls:dl_csv_zip' %}">dl_csv_zip</a>
+		</h3>
+
 	</body>
 </html>
 {% endblock %}
