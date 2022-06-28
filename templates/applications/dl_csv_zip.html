@@ -2,41 +2,77 @@
 {% block content %}
 {% load static %}
 <html>
-  <body>
+	<body>
 
-    <h3>csvだ</h3>
+		<h4>csv内容</h4>
+
+    <!-- csv内容の表示 -->
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th style="width:33%">1つ目</th>
+        <th style="width:33%">2つ目</th>
+        <th style="width:33%">3つ目</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>
+          ts,chat<br>
+          4,あああ<br>
+          4,いいい<br>
+          5,えええ<br>
+        </td>
+        <td>
+          ts,chat<br>
+          12,aaa<br>
+          22,おおお<br>
+          50,bbb<br>
+        </td>
+        <td>
+          ts,chat<br>
+          0,ccc<br>
+          11,ををを<br>
+          19,ddd<br>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <h4>csvをzipでダウンロード</h4>
 
     <form id="dl_csv_zip_form" action="{% url 'app_urls:dl_csv_zip_proc' %}" method="POST">
-      {% csrf_token %}
+			{% csrf_token %}
 
-      <!-- チェックボックス群 -->
-      <div class="form-group">
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="checkbox_1" value="1つ目" name="checkbox">
-          <label class="custom-control-label" for="checkbox_1">1つ目</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="checkbox_2" value="2つ目" name="checkbox">
-          <label class="custom-control-label" for="checkbox_2">2つ目</label>
-        </div>
-        <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" id="checkbox_3" value="3つ目" name="checkbox">
-          <label class="custom-control-label" for="checkbox_3">3つ目</label>
-        </div>
-      </div>
+			<!-- チェックボックス群 -->
+			<div class="form-group">
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="checkbox_1" value="1つ目" name="checkbox">
+					<label class="custom-control-label" for="checkbox_1">1つ目</label>
+				</div>
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="checkbox_2" value="2つ目" name="checkbox">
+					<label class="custom-control-label" for="checkbox_2">2つ目</label>
+				</div>
+				<div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="checkbox_3" value="3つ目" name="checkbox">
+					<label class="custom-control-label" for="checkbox_3">3つ目</label>
+				</div>
+			</div>
 
-      <!-- ボタン群 -->
-      <div class="d-flex align-items-center">
-        <div>
-          <!-- 保存ボタン -->
-          <div class="btn-group">
-            <button onFocus="this.blur()" type="submit" class="btn btn-success" name="action" value='save'>保存</button>
-          </div>
-        </div>
-      </div>
+			<!-- ボタン群 -->
+			<div class="d-flex align-items-center">
+				<div>
+					<!-- 保存ボタン -->
+					<div class="btn-group">
+						<button onFocus="this.blur()" type="submit" class="btn btn-primary" name="action" value='save'>保存</button>
+					</div>
+				</div>
+			</div>
 
-    </form>
+		</form>
 
-  </body>
+
+	</body>
 </html>
 {% endblock %}

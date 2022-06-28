@@ -67,9 +67,10 @@ def dl_csv_zip_proc(request):
 					csv_file.close()
 
 			# zipの内容をreponseに設定
-			zip_file.close() #ここでcloseしないとエラーが発生して解凍できない
+			#ここでcloseしないとエラーが発生して解凍できない
+			zip_file.close()
 			response=HttpResponse(memory_file.getvalue(), content_type='application/zip')
-			# checkbox_listを,で区切ってURLエンコード
+			# checkbox_listを「,」で区切ってURLエンコード
 			quoted_filename = urllib.parse.quote(",".join(checkbox_list))
 			# quoted_filenameをファイル名にする
 			# filename*にURLエンコードしたファイル名をセットすることで日本語のファイル名にも対応可能
