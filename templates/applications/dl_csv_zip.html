@@ -4,45 +4,22 @@
 <html>
 	<body>
 
-		<h4>csv内容</h4>
-
-    <!-- csv内容の表示 -->
-    <table class="table table-bordered">
-      <thead>
-      <tr>
-        <th style="width:33%">1つ目</th>
-        <th style="width:33%">2つ目</th>
-        <th style="width:33%">3つ目</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td>
-          ts,chat<br>
-          4,あああ<br>
-          4,いいい<br>
-          5,えええ<br>
-        </td>
-        <td>
-          ts,chat<br>
-          12,aaa<br>
-          22,おおお<br>
-          50,bbb<br>
-        </td>
-        <td>
-          ts,chat<br>
-          0,ccc<br>
-          11,ををを<br>
-          19,ddd<br>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-
-    <h4>csvをzipでダウンロード</h4>
-
     <form id="dl_csv_zip_form" action="{% url 'app_urls:dl_csv_zip_proc' %}" method="POST">
 			{% csrf_token %}
+
+			<h4>Djangoで複数の辞書型リストをcsvに変換し、zipで圧縮してダウンロードするサンプルページ</h4>
+
+			<!-- textarea群 -->
+			<div class="form-group">
+				<h5>1つ目の辞書型リスト</h5>
+				<textarea name="1つ目" class="form-control" rows="2">[{'ts': 4, 'chat': 'あああ'}, {'ts': 4, 'chat': 'いいい'}, {'ts': 5, 'chat': 'えええ'}]</textarea>
+				<h5>2つ目の辞書型リスト</h5>
+				<textarea name="2つ目" class="form-control" rows="2">[{'ts': 12, 'chat': 'aaa'}, {'ts': 22, 'chat': 'おおお'}, {'ts': 50, 'chat': 'bbb'}]</textarea>
+				<h5>3つ目の辞書型リスト</h5>
+				<textarea name="3つ目" class="form-control" rows="2">[{'ts': 0, 'chat': 'ccc'}, {'ts': 11, 'chat': 'ををを'}, {'ts': 19, 'chat': 'ddd'}]</textarea>
+			</div>
+
+			<h5>指定した辞書型リストをcsvに変換してzipでダウンロード</h5>
 
 			<!-- チェックボックス群 -->
 			<div class="form-group">

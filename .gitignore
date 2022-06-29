@@ -1,12 +1,9 @@
 __pycache__
 .idea
 *.py[co]$
+bk
 
 venv
 staticfiles
 db.sqlite3
 local_settings.py
-
-# migrationsフォルダの__init__.py以外を除外
-#/applications/migrations/*
-#!/applications/migrations/__init__.py
