@@ -12,6 +12,7 @@ def index(request):
 	if request.user.is_authenticated:
 		return render(request,'applications/index.html')
 	else:
+		# ログインしていない場合はログインページへ移動
 		return HttpResponseRedirect('/accounts/login/')
 
 
@@ -21,6 +22,7 @@ def dl_csv_zip(request):
 	if request.user.is_authenticated:
 		return render(request,'applications/dl_csv_zip.html')
 	else:
+		# ログインしていない場合はログインページへ移動
 		return HttpResponseRedirect('/accounts/login/')
 
 
@@ -28,27 +30,24 @@ def dl_csv_zip(request):
 def dl_csv_zip_proc(request):
 
 	if request.method=='POST':
-		# checkboxの内容をリストに格納
+		# postされたcheckboxの内容をリストに格納
 		checkbox_list=request.POST.getlist('checkbox')
 		# actionがsaveかつ、checkbox_listが空でない場合
 		# checkbox_listが空の場合に実行すると「zip」ファイルがダウンロードされてしまうのを防ぐ
 		if request.POST.get('action')=='save' and checkbox_list:
 
 			# 書き込むzipの準備
-			memory_file=BytesIO() #エラーなし
-			# res_zip=StringIO() #TypeError string argument expected, got 'bytes'
-			# res_zip = HttpResponse(content_type='application/zip') #予期しない型
+			memory_file=BytesIO()
 			zip_file=zipfile.ZipFile(memory_file,'w')
 
 			for item in checkbox_list:
 				# csvの準備
 				csv_file=HttpResponse(content_type='text/csv')
-				# csv_file=BytesIO() #TypeError: a bytes-like object is required, not 'str'
-				# csvへヘッダーの書き込み
+				# csvヘッダーの書き込み
 				writer=csv.DictWriter(csv_file,['ts','chat'])
 				writer.writeheader()
 				# csvへの書き込み
-				# 送信されるのは文字列のためevalで辞書型リストに変換
+				# postされたtextareaの内容は文字列のためevalで辞書型リストに変換
 				writer.writerows(eval(request.POST.get(item)))
 				# zipに圧縮
 				zip_file.writestr(f'{item}.csv',csv_file.getvalue())

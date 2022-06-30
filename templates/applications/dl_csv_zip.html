@@ -7,15 +7,15 @@
     <form id="dl_csv_zip_form" action="{% url 'app_urls:dl_csv_zip_proc' %}" method="POST">
 			{% csrf_token %}
 
-			<h4>Djangoで複数の辞書型リストをcsvに変換し、zipで圧縮してダウンロードするサンプルページ</h4>
+			<h4>ブログ記事「<a rel="noopener" href="https://blog.dev-neko.com/django-csv-zip" target="_blank">【Django】複数の辞書型リストをcsvに変換し、zipで圧縮してダウンロードする方法</a>」の動作確認ページです。</h4>
 
 			<!-- textarea群 -->
 			<div class="form-group">
-				<h5>1つ目の辞書型リスト</h5>
+				<h5>辞書型リスト 1つ目</h5>
 				<textarea name="1つ目" class="form-control" rows="2">[{'ts': 4, 'chat': 'あああ'}, {'ts': 4, 'chat': 'いいい'}, {'ts': 5, 'chat': 'えええ'}]</textarea>
-				<h5>2つ目の辞書型リスト</h5>
+				<h5>辞書型リスト 2つ目</h5>
 				<textarea name="2つ目" class="form-control" rows="2">[{'ts': 12, 'chat': 'aaa'}, {'ts': 22, 'chat': 'おおお'}, {'ts': 50, 'chat': 'bbb'}]</textarea>
-				<h5>3つ目の辞書型リスト</h5>
+				<h5>辞書型リスト 3つ目</h5>
 				<textarea name="3つ目" class="form-control" rows="2">[{'ts': 0, 'chat': 'ccc'}, {'ts': 11, 'chat': 'ををを'}, {'ts': 19, 'chat': 'ddd'}]</textarea>
 			</div>
 
