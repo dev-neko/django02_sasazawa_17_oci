@@ -1,0 +1,76 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+
+<!-- ajax処理を行うフォーム -->
+<!-- action先はDjangoテンプレートで「applications/urls.py」の「app_name」と「path」の「name」を使用して指定 -->
+<form id="ajax_form" action="{% url 'app_urls:rec_ajax_proc' %}" method="POST">
+	{% csrf_token %}
+
+	<h4>ブログ記事「<a rel="noopener" href="https://blog.dev-neko.com/django-recursive-ajax" target="_blank">【Django】Ajaxで再帰処理を行う方法</a>」の動作確認ページです。</h4>
+
+	<h5>数値の選択</h5>
+	<div class="form-group">
+		<select class="form-control" id="select_num">
+			<option>10</option>
+			<option>20</option>
+			<option>30</option>
+		</select>
+	</div>
+
+	<!-- ボタン群 -->
+	<div class="d-flex align-items-center">
+		<div>
+			<!-- 実行ボタン -->
+			<div class="btn-group">
+				<!-- 「onFocus="this.blur()"」でボタンのフォーカス線を削除 -->
+				<button onFocus="this.blur()" type="submit" class="btn btn-primary" id="run_btn">実行</button>
+			</div>
+			<!-- 削除ボタン -->
+			<div class="btn-group">
+				<!-- 「onFocus="this.blur()"」でボタンのフォーカス線を削除 -->
+				<!-- 「onclick」でページをリロードさせる -->
+				<input type="button" onFocus="this.blur()" class="btn btn-danger" value="中止" onclick="window.location.reload();">
+			</div>
+		</div>
+	</div>
+
+</form>
+
+<!-- 現在値・状態・進捗をテーブルで表示 -->
+<h5>結果表示テーブル</h5>
+<table class="table table-bordered">
+	<thead>
+	<tr>
+		<th style="width:15%">現在値</th>
+		<th style="width:15%">状態</th>
+		<th>進捗</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<!-- 現在値のセル -->
+		<td id="current_num_cell"><br></td>
+		<!-- 状態のセル -->
+		<td id="state_cell"><br></td>
+		<!-- 進捗のセル -->
+		<td id="progress_cell">
+			<!-- プログレスバーの初期表示 -->
+			<div class="progress">
+				<div class="progress-bar progress-bar-striped progress-bar-animated"
+						 style="width:0%"
+						 role="progressbar"
+						 aria-valuenow="0"
+						 aria-valuemin="0"
+						 aria-valuemax="100">0%</div>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+</table>
+
+</body>
+</html>
+{% endblock %}

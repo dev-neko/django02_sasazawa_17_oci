@@ -19,8 +19,7 @@
 		<!-- content ここまで -->
 
 		<!-- 外部jsファイル ここから -->
-		<script type="text/javascript" src="{% static 'js/ajax_test.js' %}"></script>
-		<script type="text/javascript" src="{% static 'js/bootstrap_popper.js' %}"></script>
+		{% include "base/js.html" %}
 		<!-- 外部jsファイル ここまで -->
 
 		<!-- Footer ここから -->
@@ -28,10 +27,3 @@
 		<!-- Footer ここまで -->
 	</body>
 </html>
-
-{# コメント部分 #}
-
-{% comment ’以下の2行をコメントアウト’ %}
-<h1>タイトル</h1>
-<p>本文</p>
-{% endcomment %}
