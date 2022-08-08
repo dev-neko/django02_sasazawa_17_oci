@@ -20,4 +20,8 @@ urlpatterns = [
 	# Ajax経由でURL「~/rec_ajax_proc/」にアクセスした際に「applications/views.py」のrec_ajax_proc関数を実行させる
 	# 「name='rec_ajax_proc'」は後ほどrec_ajax.htmlで使用する
 	path('rec_ajax_proc/',views.rec_ajax_proc,name='rec_ajax_proc'),
+
+	# ヘルプボタン系
+	# URL「~/help_modal/」にアクセスした際に「applications/views.py」のhelp_modal関数を実行させる
+	path('help_modal/',views.help_modal,name='help_modal'),
 ]

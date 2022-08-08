@@ -51,7 +51,7 @@ $('#ajax_form').on('submit', function(e) {
 		'method': $('#ajax_form').prop("method"),
 		// views.pyに送信するデータの指定
 		'data': {
-			// ajax.htmlのid="select_num"を指定し、セレクトボックスで選択されている表示文字列を取り出す
+			// rec_ajax.htmlのid="select_num"を指定し、セレクトボックスで選択されている表示文字列を取り出す
 			'select_num':$('#select_num option:selected').text(),
 		},
 		// データ形式にjsonを指定

@@ -125,3 +125,13 @@ def rec_ajax_proc(request):
 		time.sleep(1)
 
 	return JsonResponse(json_resp)
+
+
+# help_modalページの表示
+def help_modal(request):
+	# ログインの確認
+	if request.user.is_authenticated:
+		return render(request,'applications/help_modal.html')
+	else:
+		# ログインしていない場合はログインページへ移動
+		return HttpResponseRedirect('/accounts/login/')

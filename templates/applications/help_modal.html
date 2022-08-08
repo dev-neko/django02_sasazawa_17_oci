@@ -1,0 +1,15 @@
+{% extends "base/base.html" %}
+{% block content %}
+{% load static %}
+<html>
+<body>
+
+<h4>ブログ記事「<a rel="noopener" href="https://blog.dev-neko.com/django_help_modal" target="_blank">【Django】【Bootstrap4】部品化したモーダルをヘルプボタンで表示させる</a>」の動作確認ページです。</h4>
+
+{% include 'help_modal/help_modal_template.html' with header='<span style="font-size:2rem;">HTMLをそのまま表示</span>' modal_id='bbb' modal_title='サンプルテキスト' include_body=False modal_body='<p>サンプルテキスト</p><p>サンプルテキスト</p><p>サンプルテキスト</p>' only %}
+
+{% include 'help_modal/help_modal_template.html' with header='<span style="font-size:2rem;">HTMLをinclude</span>' modal_id='aaa' modal_title='サンプルテキスト' include_body=True modal_body='help_modal/help_modal_body.html' only %}
+
+</body>
+</html>
+{% endblock %}

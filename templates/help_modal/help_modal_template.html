@@ -1,0 +1,35 @@
+<div class="d-flex align-items-center">
+	{{ header }}
+	<button type="button"
+					class="btn btn-dark rounded-circle p-0 d-flex align-items-center justify-content-center"
+					style="width:1.3rem; height:1.3rem; position:relative; left:3px; position:relative;"
+					data-toggle="modal"
+					data-target="#{{ modal_id }}"
+					title="ヘルプ">?
+	</button>
+</div>
+<div class="modal fade"
+		 id="{{ modal_id }}"
+		 tabindex="-1"
+		 role="dialog"
+		 aria-labelledby="{{ modal_id }}_label1"
+		 aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="{{ modal_id }}_label2">{{ modal_title }}</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				{# include_bodyの内容でincludeするかそのまま表示させるか分岐 #}
+				{% if include_body %}
+					{% include modal_body %}
+				{% else %}
+					{{ modal_body }}
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
