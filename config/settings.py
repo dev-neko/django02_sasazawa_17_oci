@@ -64,19 +64,28 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+# SQLite3
 DATABASES={
 	'default':{
-		'ENGINE':'django_cockroachdb',
-		'NAME':os.environ['NAME'],
-		'USER':os.environ['USER'],
-		'PASSWORD':os.environ['PASSWORD'],
-		'HOST':os.environ['HOST'],
-		'PORT':os.environ['PORT'],
-		'OPTIONS': {
-			'sslmode':'verify-full',
-		},
-	},
+		'ENGINE':'django.db.backends.sqlite3',
+		'NAME':os.path.join(BASE_DIR,'db.sqlite3'),
+	}
 }
+
+# CockroachDB
+# DATABASES={
+# 	'default':{
+# 		'ENGINE':'django_cockroachdb',
+# 		'NAME':os.environ['NAME'],
+# 		'USER':os.environ['USER'],
+# 		'PASSWORD':os.environ['PASSWORD'],
+# 		'HOST':os.environ['HOST'],
+# 		'PORT':os.environ['PORT'],
+# 		'OPTIONS': {
+# 			'sslmode':'verify-full',
+# 		},
+# 	},
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
 	{
