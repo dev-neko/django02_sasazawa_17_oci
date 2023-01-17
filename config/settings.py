@@ -10,7 +10,9 @@ DEBUG=False
 
 ALLOWED_HOSTS=['*']
 
-CSRF_TRUSTED_ORIGINS=CORS_ORIGIN_WHITELIST=['https://012retwitchapi.aheahe1919.repl.co']
+replit_appname='djangoreplitexamples'
+replit_username='devnekoreplit'
+CSRF_TRUSTED_ORIGINS=CORS_ORIGIN_WHITELIST=['https://'+replit_appname+'.'+replit_username+'.repl.co']
 
 # シークレットキーを都度作成する
 SECRET_KEY=get_random_secret_key()
@@ -97,15 +99,13 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-# https://devcenter.heroku.com/ja/articles/django-assets
-# Heroku推奨の方法
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
 	os.path.join(BASE_DIR, 'static'),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# この処理を追加することで settings.py の DEBUG が False でも local_settings があればデバッグ環境だと判断されて runserver が可能になる→DEBUGを切り替える必要もなくなる
+# local_settingsの有無で設定を変更する
 try:
 	from .local_settings import *
 except ImportError:
