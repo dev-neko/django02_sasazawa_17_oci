@@ -2,13 +2,14 @@ import os
 import subprocess
 
 
+# requirements.txtから一括インストール
 cmd="pip install -r requirements.txt"
 subprocess.run(cmd.split(' '))
 
 cmd="python manage.py collectstatic --noinput"
 subprocess.run(cmd.split(' '))
 
-# CA証明書をDLする
+# CA証明書をDL
 # cmd=os.getenv("DOWNLOAD_CA_CERT")
 # subprocess.run(cmd.split(' '))
 
