@@ -6,7 +6,7 @@ app_name='app_urls'
 
 urlpatterns = [
 	# トップページでは「applications/views.py」のindex関数を実行する
-	path('',views.index,name='index'),
+	# path('',views.index,name='index'),
 
 	# dl_csv_zip系
 	# URL「~/dl_csv_zip/」にアクセスした際に「applications/views.py」のdl_csv_zip関数を実行させる
